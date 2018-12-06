@@ -8,3 +8,9 @@ to push changes to git:
 		git commit -m "<message>"
 		git push -u origin master
 		
+to pull changes
+
+	- go to git bash
+	- type:
+		cd /c/eclipse-workspace/incident-api
+		git pull
