@@ -1,0 +1,10 @@
+to push changes to git:
+
+	- go to git bash
+	- type:
+		cd /c/eclipse-workspace/incident-api
+		git status
+		git add -A
+		git commit -m "<message>"
+		git push -u origin master
+		
