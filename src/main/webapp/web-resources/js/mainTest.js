@@ -1,10 +1,47 @@
-$(document).ready(function(){
 
-$("#welcome").text('Welcome, ' + localStorage.getItem("firstName"));
+//var user = "";
 
+
+var loginVar = localStorage.getItem('loginVar');
+//alert("oi");
+//localStorage.setItem('loginVar',0);
+
+
+
+$(document).ready(function () {
+	//alert ("test1");
+	var loginVar = localStorage.getItem('loginVar');
+	//alert("test2");
+
+	//alert(loginVar);
+
+	if (loginVar == 0) {
+		$('#loginButton').show();
+
+		$('#logoutButton').hide();
+
+		$('#registerButton').show();
+
+	} else if (loginVar == 1) {
+		$('#loginButton').hide();
+
+		$('#logoutButton').show();
+
+		$('#registerButton').hide();
+	} else {
+		$('#loginButton').show();
+
+		$('#logoutButton').hide();
+
+		$('#registerButton').show();
+
+	}
 });
 
-var welcomeUser;
+function login() {
+	window.location.href = 'login.html';
+	validateLogin();
+};
 
 var validateLogin = function () {
 	var userId = $('#userid').val();
@@ -15,18 +52,32 @@ var validateLogin = function () {
 		url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
 		dataType: "json",
 		async: false,
-		success: function (data) { 
+		success: function (data) {
 			loginSuccess(data);
+			localStorage.setItem('loginVar',1);
+			window.location.href='mainPage.html';
 		},
-		
+
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			$("#validationMessage").text("invalid login/ password");
 		}
 	});
 };
 
+function loginSuccess(data) {
+	localStorage.setItem('firstName', data.firstName);
+	alert(localStorage.getItem('firstName'));
+	localStorage.setItem('loginVar',1);
+	welcomeUser = "Welcome, " + localStorage.getItem('firstName');
 
-// SUBMIT FORM
+	window.location.href = 'mainPage.html';
+};
+
+function register() {
+	window.location.href = 'register.html';
+	userRegister();
+};
+
 var userRegister = function () {
 	// Prevent the form from submitting via the browser.
 	event.preventDefault();
@@ -54,6 +105,7 @@ function ajaxPost() {
 
 		success: function (data, textStatus, jqXHR) {
 			alert('User registered successfully' + jqXHR.status);
+			//localStorage.setItem('loginVar', 1);
 			window.location.href = 'mainPage.html';
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -63,18 +115,7 @@ function ajaxPost() {
 
 }
 
-function loginSuccess(data){
-	localStorage.setItem('firstName', data.firstName);
-	alert(localStorage.getItem('firstName'));
-	welcomeUser= "Welcome, " + localStorage.getItem('firstName');
-
-	window.location.href = 'mainPage.html';
-};
-
-function logout(){
-
-	localStorage.setItem('firstName', "");
-	
-	$("#welcome").val("");
+function logout() {
+	localStorage.setItem('loginVar', 0);
 	window.location.reload(true);
 };

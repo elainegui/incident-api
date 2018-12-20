@@ -1,35 +1,71 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="map"></div>
-    <script>
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
-        });
-      }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&callback=initMap"
-    async defer></script>
-  </body>
+
+<head>
+	<!-- meta tags -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Main Page</title>
+
+	<link rel="stylesheet" type="text/css" href="styles/maps.css">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	 crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+	 crossorigin="anonymous"></script>
+
+	<script src="js/googleMaps.js"></script>
+	<script src="js/mainTest.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&callback=initMap"
+	 async defer>
+	</script>
+</head>
+
+<body>
+
+	<div>
+		<p id='welcome'></p>
+	</div>
+
+
+
+	<div>
+		<button type="button" class="btn btn-primary btn-sm" id="loginButton" onclick="login()">
+			<span class="glyphicon glyphicon-log-out"></span> Log in
+		</button>
+
+		<button type="button" class="btn btn-primary btn-sm" id="logoutButton" onclick="logout()">
+			<span class="glyphicon glyphicon-log-out"></span> Log out
+		</button>
+
+		<button type="button" class="btn btn-primary btn-sm" id="registerButton" onclick="register()">
+			<span class="glyphicon glyphicon-log-out"></span> Register
+		</button>
+	</div>
+
+
+	<h1>Incident APP</h1>
+
+	<div id="floating-panel">
+		<input id="address" type="textbox" value="Athlone">
+		<input id="submit" type="button" value="Geocode">
+	  </div>
+
+	<div id="map"></div>
+
+	<script type="text/javascript">
+
+
+
+	</script>
+
+</body>
+
 </html>

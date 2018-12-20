@@ -10,19 +10,17 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="styles/newCss.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
 
     <!-- Optional JavaScript -->
-    <script src="js/main.js"></script>
-    
+
+
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script src="js/main.js"></script>
 
 </head>
 
@@ -31,40 +29,44 @@
         <form method="post">
             <h2 class="text-center">Register New User</h2>
             <div class="form-group">
-                    <label for="firstName">First Name</label>
-                <input type="text" class="form-control" placeholder="first name" required="required">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" placeholder="first name" required="required" id="firstName">
             </div>
             <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" placeholder="last name" required="required">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" placeholder="last name" required="required" id="lastName">
             </div>
             <div class="form-group">
-                    <label for="email">Country</label>
-                    <input type="text" class="form-control" placeholder="country" required="required">
+                <label for="email">Country</label>
+                <input type="text" class="form-control" placeholder="country" required="required" id="country">
             </div>
             <div class="form-group">
                 <label for="email">City</label>
-                <input type="text" class="form-control" placeholder="city" required="required">
+                <input type="text" class="form-control" placeholder="city" required="required" id="city">
             </div>
             <div class="form-group">
-                    <label for="email">E-mail address</label>
-                    <input type="email" class="form-control" placeholder="user@example.com" required="required">
+                <label for="email">E-mail address</label>
+                <input type="email" class="form-control" placeholder="user@example.com" required="required" id="email">
             </div>
             <div class="form-group">
-                    <label for="password">Password</label>
-                <input type="password" class="form-control" placeholder="password" required="required" id="password1">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" placeholder="password" required="required" id="password">
             </div>
             <div class="form-group">
-                    <label for="confpwd">Confirm Password</label>
-                <input type="password" class="form-control" placeholder="password" required="required" id="password2">
+                <label for="confpwd">Confirm Password</label>
+                <input type="password" class="form-control" placeholder="password" required="required" id="confirmPassword">
             </div>
-             <div class="form-group">
+            <div class="form-group">
                 <p id="validationMessage" style="color:red"></p>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary btn-block" onclick="validateRegistry()">Register</button>
+                <button type="button" class="btn btn-primary btn-block" onclick="userRegister()">Register</button>
             </div>
+
+            
         </form>
+        <p id="questionAccount">Already Registered?</p>
+        <p class="text-center"><a href="login.html" id="txtCreateAcc">Log In</a></p>
     </div>
 </body>
 

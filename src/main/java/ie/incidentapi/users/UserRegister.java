@@ -18,14 +18,16 @@ package ie.incidentapi.users;
 		private String city;
 		private String email;
 		private String password;
-		private String confirmPassword;
+		//private String confirmPassword;
+		private float userLatitude;
+		private float userLongitude;
 		
 		public UserRegister() {
 			super();
 		}
 		
 		public UserRegister(int id, String firstName, String lastName, String country, String city, String email,
-				String password, String confirmPassword) {
+				String password, float userLatitude, float userLongitude) {
 			super();
 			this.id = id;
 			this.firstName = firstName;
@@ -34,7 +36,7 @@ package ie.incidentapi.users;
 			this.city = city;
 			this.email = email;
 			this.password = password;
-			this.confirmPassword = confirmPassword;
+			//this.confirmPassword = confirmPassword;
 		}
 
 		public int getId() {
@@ -79,13 +81,29 @@ package ie.incidentapi.users;
 		public void setPassword(String password) {
 			this.password = password;
 		}
-		public String getConfirmPassword() {
+/*		public String getConfirmPassword() {
 			return confirmPassword;
 		}
 		public void setConfirmPassword(String confirmPassword) {
 			this.confirmPassword = confirmPassword;
 		}
-		
+*/
+
+		public float getUserLatitude() {
+			return userLatitude;
+		}
+
+		public void setUserLatitude(float userLatitude) {
+			this.userLatitude = userLatitude;
+		}
+
+		public float getUserLongitude() {
+			return userLongitude;
+		}
+
+		public void setUserLongitude(float userLongitude) {
+			this.userLongitude = userLongitude;
+		}		
 		
 
 	}
