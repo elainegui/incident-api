@@ -22,7 +22,8 @@
 	 crossorigin="anonymous"></script>
 
 	<script src="js/googleMaps.js"></script>
-	<script src="js/mainTest.js"></script>
+	<!--<script src="js/mainTest.js"></script>   -->
+	<script src="js/main.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&callback=initMap"
 	 async defer>
 	</script>
@@ -38,7 +39,7 @@
 
 	<div>
 		<button type="button" class="btn btn-primary btn-sm" id="loginButton" onclick="login()">
-			<span class="glyphicon glyphicon-log-out"></span> Log in
+			<span class="glyphicon glyphicon-log-in"></span> Log in
 		</button>
 
 		<button type="button" class="btn btn-primary btn-sm" id="logoutButton" onclick="logout()">
@@ -47,6 +48,10 @@
 
 		<button type="button" class="btn btn-primary btn-sm" id="registerButton" onclick="register()">
 			<span class="glyphicon glyphicon-log-out"></span> Register
+		</button>
+
+		<button type="button" class="btn btn-primary btn-sm" id="reportIncidentButton" onclick="reportIncident()">
+			<span class="glyphicon glyphicon-log-out"></span> Report an Incident
 		</button>
 	</div>
 

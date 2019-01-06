@@ -1,6 +1,7 @@
 package ie.incidentapi.users;
 
 import java.net.URI;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-public class UserController {
+public class UserLoginController {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserRegisterRepository userRegisterRepository;
 
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
@@ -37,9 +38,9 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "user")
-	public User getUser(@RequestParam("email") String email, @RequestParam("password") String password) {
+	public UserRegister getUserRegister(@RequestParam("email") String email, @RequestParam("password") String password) {
 
-		return userRepository.findOneByEmailAndPassword(email, password);
+		return userRegisterRepository.findOneByEmailAndPassword(email, password);
 	}
 	
 

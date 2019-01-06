@@ -23,8 +23,8 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&libraries=places&callback=initAutocomplete"
         async defer></script>
 
-    <script src="js/main.js"></script>
     <script src="js/googleMaps.js"></script>
+    <script src="js/main.js"></script>
 
 
 </head>
@@ -48,6 +48,7 @@
                 <!--   form address google maps   -->
 
                 <div id="locationField">
+                        <td class="label">Address</td>
                     <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
                 </div>
 
@@ -77,6 +78,8 @@
                     </tr>
 
                 </table>
+
+               <p></p>
 
                 <div class="form-group">
                     <label for="email">E-mail address</label>

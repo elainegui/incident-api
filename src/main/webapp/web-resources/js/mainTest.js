@@ -119,3 +119,4 @@ function logout() {
 	localStorage.setItem('loginVar', 0);
 	window.location.reload(true);
 };
+
