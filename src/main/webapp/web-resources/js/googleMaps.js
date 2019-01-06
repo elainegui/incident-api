@@ -1,5 +1,13 @@
 var map, infoWindow;
 
+//declare var pos to get curr position
+//var pos;
+
+function loadReportIncidentPage() {
+  initMap();
+  initAutocomplete();
+}
+
 function initMap() {
     var location = {lat:53.4239, lng:-7.9407}
     map = new google.maps.Map(document.getElementById("map"),{
@@ -11,7 +19,7 @@ function initMap() {
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
+       var pos = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
@@ -39,11 +47,11 @@ function initMap() {
 
 
 
-    var geocoder = new google.maps.Geocoder();
+    // var geocoder = new google.maps.Geocoder();
 
-    document.getElementById('submit').addEventListener('click', function() {
-        geocodeAddress(geocoder, map);
-    });
+    // document.getElementById('submit').addEventListener('click', function() {
+    //     geocodeAddress(geocoder, map);
+    // });
     
 
 	// var marker = new google.maps.Marker({
@@ -55,7 +63,8 @@ function initMap() {
 }
 
 function geocodeAddress(geocoder, resultsMap) {
-    var address = document.getElementById('address').value;
+    var address = document.getElementById('autocomplete').value;
+    console.log("address: " + address);
     geocoder.geocode({'address': address}, function(results, status) {
       if (status === 'OK') {
         resultsMap.setCenter(results[0].geometry.location);
@@ -83,7 +92,7 @@ function geocodeAddress(geocoder, resultsMap) {
       var componentForm = {
         street_number: 'short_name',
         route: 'long_name',
-        locality: 'long_name',
+        postal_town: 'long_name',
         administrative_area_level_1: 'short_name',
         country: 'long_name',
         postal_code: 'short_name',
@@ -130,6 +139,7 @@ function geocodeAddress(geocoder, resultsMap) {
           //   document.getElementById(lng).value = val;
           // }
         }
+        syncMapWithAddress();
       }
 
       //added var latitude, longitude
@@ -160,3 +170,11 @@ function geocodeAddress(geocoder, resultsMap) {
           });
         }
       }
+
+      function syncMapWithAddress() {
+       if (map) {
+        var geocoder = new google.maps.Geocoder();
+        geocodeAddress(geocoder, map);
+       } 
+      }
+

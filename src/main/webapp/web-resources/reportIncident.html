@@ -21,10 +21,12 @@
 	 crossorigin="anonymous"></script>
 
 	<script src="js/googleMaps.js"></script>
-	<script src="js/mainTest.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&callback=initMap"
-	 async defer>
-	</script>
+    <script src="js/main.js"></script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&libraries=places&callback=loadReportIncidentPage"
+    async defer></script>
+
+
 </head>
 
 <body>
@@ -33,13 +35,51 @@
     
     <h2 id="reportpageHeader2">Report an Incident</h2>
 
-	<div id="floating-panel">
+	<!--<div id="floating-panel">
 		<input id="address" type="textbox" value="Athlone">
 		<input id="submit" type="button" value="Geocode">
-	  </div>
+	  </div>-->
 
-	<div id="map"></div>
+    <div id="map"></div>
+    
+    <br>
+    <form method="post">
 
+
+                <!--   form address google maps   -->
+
+                <div id="locationField">
+                        <td class="label">Address</td>
+                    <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" type="text" onblur="syncMapWithAddress()"></input>
+                </div>
+
+                <table id="address">
+                    <tr>
+                        <td class="label">Street address</td>
+                        <td class="slimField"><input class="field" id="street_number" disabled="true"></input></td>
+                        <td class="wideField" colspan="2"><input class="field" id="route" disabled="true"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="label">City</td>
+                        <!-- Note: Selection of address components in this example is typical.
+               You may need to adjust it for the locations relevant to your app. See
+               https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
+          -->
+                        <td class="wideField" colspan="3"><input class="field" id="postal_town" disabled="true"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="label">State</td>
+                        <td class="slimField"><input class="field" id="administrative_area_level_1" disabled="true"></input></td>
+                        <td class="label">Zip code</td>
+                        <td class="wideField"><input class="field" id="postal_code" disabled="true"></input></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Country</td>
+                        <td class="wideField" colspan="3"><input class="field" id="country" disabled="true"></input></td>
+                    </tr>
+
+                </table>
+</form>
 	<script type="text/javascript">
 
 
