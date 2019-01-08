@@ -10,18 +10,21 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="styles/newCss.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          crossorigin="anonymous">
 
     <!-- Optional JavaScript -->
 
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            crossorigin="anonymous"></script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&libraries=places&callback=initAutocomplete"
-        async defer></script>
+            async defer></script>
 
     <script src="js/googleMaps.js"></script>
     <script src="js/main.js"></script>
@@ -30,83 +33,85 @@
 </head>
 
 <body>
-    <div class="login-form">
-        <div class="row register-form">
-            <!-- <div class="col-md-6"> -->
-            <form method="post">
-                <h2 class="text-center">Register New User</h2>
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input type="text" class="form-control" placeholder="first name" required="required" id="firstName">
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" class="form-control" placeholder="last name" required="required" id="lastName">
-                </div>
-            
+<div class="login-form">
+    <div class="row register-form">
+        <!-- <div class="col-md-6"> -->
+        <form method="post">
+            <h2 class="text-center">Register New User</h2>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" placeholder="first name" required="required" id="firstName">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" placeholder="last name" required="required" id="lastName">
+            </div>
 
-                <!--   form address google maps   -->
 
-                <div id="locationField">
-                        <td class="label">Address</td>
-                    <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
-                </div>
+            <!--   form address google maps   -->
 
-                <table id="address">
-                    <tr>
-                        <td class="label">Street address</td>
-                        <td class="slimField"><input class="field" id="street_number" disabled="true"></input></td>
-                        <td class="wideField" colspan="2"><input class="field" id="route" disabled="true"></input></td>
-                    </tr>
-                    <tr>
-                        <td class="label">City</td>
-                        <!-- Note: Selection of address components in this example is typical.
-               You may need to adjust it for the locations relevant to your app. See
-               https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
-          -->
-                        <td class="wideField" colspan="3"><input class="field" id="postal_town" disabled="true"></input></td>
-                    </tr>
-                    <tr>
-                        <td class="label">State</td>
-                        <td class="slimField"><input class="field" id="administrative_area_level_1" disabled="true"></input></td>
-                        <td class="label">Zip code</td>
-                        <td class="wideField"><input class="field" id="postal_code" disabled="true"></input></td>
-                    </tr>
-                    <tr>
-                        <td class="label">Country</td>
-                        <td class="wideField" colspan="3"><input class="field" id="country" disabled="true"></input></td>
-                    </tr>
+            <div id="locationField">
+                <td class="label">Address</td>
+                <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" type="text"></input>
+            </div>
 
-                </table>
+            <table id="address">
+                <tr>
+                    <td class="label">Street address</td>
+                    <td class="slimField"><input class="field" id="street_number" disabled="true"></input></td>
+                    <td class="wideField" colspan="2"><input class="field" id="route" disabled="true"></input></td>
+                </tr>
+                <tr>
+                    <td class="label">City</td>
+                    <!-- Note: Selection of address components in this example is typical.
+           You may need to adjust it for the locations relevant to your app. See
+           https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
+      -->
+                    <td class="wideField" colspan="3"><input class="field" id="locality" disabled="true"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">State</td>
+                    <td class="slimField"><input class="field" id="administrative_area_level_1" disabled="true"></input>
+                    </td>
+                    <td class="label">Zip code</td>
+                    <td class="wideField"><input class="field" id="postal_code" disabled="true"></input></td>
+                </tr>
+                <tr>
+                    <td class="label">Country</td>
+                    <td class="wideField" colspan="3"><input class="field" id="country" disabled="true"></input></td>
+                </tr>
 
-               <p></p>
+            </table>
 
-                <div class="form-group">
-                    <label for="email">E-mail address</label>
-                    <input type="email" class="form-control" placeholder="user@example.com" required="required" id="email">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" placeholder="password" required="required" id="password">
-                </div>
-                <div class="form-group">
-                    <label for="confpwd">Confirm Password</label>
-                    <input type="password" class="form-control" placeholder="password" required="required" id="confirmPassword">
-                </div>
-                <div class="form-group">
-                    <p id="validationMessage" style="color:red"></p>
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-primary btn-block" onclick="userRegister()">Register</button>
-                </div>
-            </form>
-        </div>
+            <p></p>
+
+            <div class="form-group">
+                <label for="email">E-mail address</label>
+                <input type="email" class="form-control" placeholder="user@example.com" required="required" id="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" placeholder="password" required="required" id="password">
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" class="form-control" placeholder="password" required="required"
+                       id="confirmPassword">
+            </div>
+            <div class="form-group">
+                <p id="validationMessage" style="color:red"></p>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary btn-block" onclick="userRegister()">Register</button>
+            </div>
+        </form>
     </div>
+</div>
 
 
-    
-    <p id="questionAccount">Already Registered?</p>
-    <p class="text-center"><a href="login.html" id="txtCreateAcc">Log In</a></p>
+<p id="questionAccount">Already Registered?</p>
+<p class="text-center"><a href="login.html" id="txtCreateAcc">Log In</a></p>
 
 </body>
 

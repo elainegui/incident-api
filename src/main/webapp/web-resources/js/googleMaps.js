@@ -6,7 +6,7 @@ function loadReportIncidentPage() {
 }
 
 function initMap() {
-  var location = { lat: 53.4239, lng: -7.9407 }
+  var location = { lat: 53.4239, lng: -7.9407 };
   map = new google.maps.Map(document.getElementById("map"), {
     zoom: 16,
     center: location
@@ -70,10 +70,10 @@ var placeSearch, autocomplete;
 var componentForm = {
   street_number: 'short_name',
   route: 'long_name',
-  postal_town: 'long_name',
+  locality: 'long_name',
   administrative_area_level_1: 'short_name',
   country: 'long_name',
-  postal_code: 'short_name',
+  postal_code: 'short_name'
 };
 
 function initAutocomplete() {
