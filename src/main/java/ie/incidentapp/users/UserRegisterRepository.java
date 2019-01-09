@@ -1,4 +1,4 @@
-package ie.incidentapi.users;
+package ie.incidentapp.users;
 
 import org.springframework.data.repository.CrudRepository;
 

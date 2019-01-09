@@ -1,12 +1,12 @@
-package ie.incidentapi;
+package ie.incidentapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class IncidentApiDataApplication {
+public class IncidentAppDataApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(IncidentApiDataApplication.class, args);
+		SpringApplication.run(IncidentAppDataApplication.class, args);
 	}
 }
