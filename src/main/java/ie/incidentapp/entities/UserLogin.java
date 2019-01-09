@@ -1,4 +1,4 @@
-package ie.incidentapp.users;
+package ie.incidentapp.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

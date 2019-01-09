@@ -81,7 +81,7 @@ var userRegister = function () {
 
 function ajaxPost() {
 	//added
-	//var latitude = place.geometry.location.lat();
+	var latitude = place.geometry.location.lat();
 	//alert("lat "+latitude);
 
 	//added

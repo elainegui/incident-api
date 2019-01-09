@@ -1,6 +1,8 @@
-package ie.incidentapp.users;
+package ie.incidentapp.repositories;
 
 import org.springframework.data.repository.CrudRepository;
+
+import ie.incidentapp.entities.UserRegister;
 
 public interface UserRegisterRepository extends CrudRepository<UserRegister, String> {
 	// public void addUserRegister(UserRegister userRegister);
