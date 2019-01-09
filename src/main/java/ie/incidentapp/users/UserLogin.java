@@ -14,7 +14,8 @@ public class UserLogin {
 	private String email;
 	private String password;
 
-	public UserLogin() {}
+	public UserLogin() {
+	}
 
 	public int getId() {
 		return id;
