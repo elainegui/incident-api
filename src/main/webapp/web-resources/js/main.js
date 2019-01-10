@@ -1,34 +1,56 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
-$("#welcome").text('Welcome, ' + localStorage.getItem("firstName"));
+	$("#welcome").text('Welcome, ' + localStorage.getItem("firstName"));
 
-//alert ("test1");
-var loginVar = localStorage.getItem('loginVar');
-//alert("test2");
+	//alert ("test1");
+	var loginVar = localStorage.getItem('loginVar');
+	//alert("test2");
 
-//alert(loginVar);
+	//alert(loginVar);
 
-if (loginVar == 0) {
-	$('#loginButton').show();
+	if (loginVar == 0) {
+		$('#loginButton').show();
 
-	$('#logoutButton').hide();
+		$('#logoutButton').hide();
 
-	$('#registerButton').show();
+		$('#registerButton').show();
 
-} else if (loginVar == 1) {
-	$('#loginButton').hide();
+	} else if (loginVar == 1) {
+		$('#loginButton').hide();
 
-	$('#logoutButton').show();
+		$('#logoutButton').show();
 
-	$('#registerButton').hide();
-} else {
-	$('#loginButton').show();
+		$('#registerButton').hide();
+	} else {
+		$('#loginButton').show();
 
-	$('#logoutButton').hide();
+		$('#logoutButton').hide();
 
-	$('#registerButton').show();
+		$('#registerButton').show();
 
-}
+	}
+
+
+	//Fields validation in register user form
+// 	$('#registrationForm').validate(
+// 		{
+// 		 rules: {
+// 			firstName: {
+// 			 minlength: 2,
+// 			 required: true
+// 		   }
+// 		}
+// 		});
+		
+// 		 highlight: function(element) {
+//                 $(element).closest('.control-group').removeClass('success').addClass('error');
+//               },
+//               success: function(element) {
+//                 element
+//                 .text('OK!').addClass('valid')
+//                 .closest('.control-group').removeClass('error').addClass('success');
+//               }
+//              });
 
 });
 
@@ -53,10 +75,10 @@ var validateLogin = function () {
 		url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
 		dataType: "json",
 		async: false,
-		success: function (data) { 
+		success: function (data) {
 			loginSuccess(data);
 		},
-		
+
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			$("#validationMessage").text("invalid login/ password");
 		}
@@ -71,9 +93,6 @@ var userRegister = function () {
 	//  	console.log(data.results[0].geometry.location.lat);
 	//    });
 
-
-	//alert("oi1");
-	//alert("lat "+latitude);  ok
 	// Prevent the form from submitting via the browser.
 	event.preventDefault();
 	ajaxPost();
@@ -82,11 +101,7 @@ var userRegister = function () {
 function ajaxPost() {
 	//added
 	var latitude = place.geometry.location.lat();
-	//alert("lat "+latitude);
-
-	//added
-//	geolocate();
-//	alert("lat "+latitude);
+	var longitude = place.geometry.location.lng();
 
 	// PREPARE FORM DATA
 	var formData = {
@@ -105,7 +120,7 @@ function ajaxPost() {
 		confirmPassword: $("#confirmPassword").val(),
 		userLatitude: latitude,
 		userLongitude: longitude
-		
+
 	}
 	// DO POST
 	$.ajax({
@@ -126,11 +141,11 @@ function ajaxPost() {
 
 }
 
-function loginSuccess(data){
+function loginSuccess(data) {
 	localStorage.setItem('firstName', data.firstName);
 	localStorage.setItem('userId', data.id);
-	alert(localStorage.getItem('userId') + " - " + localStorage.getItem('firstName') );
-	welcomeUser= "Welcome, " + localStorage.getItem('firstName');
+	alert(localStorage.getItem('userId') + " - " + localStorage.getItem('firstName'));
+	welcomeUser = "Welcome, " + localStorage.getItem('firstName');
 
 	window.location.href = 'mainPage.html';
 };
@@ -144,12 +159,15 @@ var userRegister = function () {
 	// Prevent the form from submitting via the browser.
 	event.preventDefault();
 	ajaxPost();
+
+	window.location.href = 'mainPage.html';
+
 };
 
-function logout(){
+function logout() {
 
 	localStorage.setItem('firstName', "");
-	
+
 	$("#welcome").val("");
 	window.location.reload(true);
 };
@@ -163,15 +181,15 @@ function saveIncident() {
 	var place = autocomplete.getPlace();
 
 	var formData = {
-			date: new Date(),
-			userId: localStorage.getItem('userId'),
-			typeId: $("#incidentType").val(),
-			verified: false,
-			latitude: place.geometry.location.lat(),
-			longitude: place.geometry.location.lng(),
-			image: $("#photo").val(),
-			message: $("#message").val() 
-		}
+		date: new Date(),
+		userId: localStorage.getItem('userId'),
+		typeId: $("#incidentType").val(),
+		verified: false,
+		latitude: place.geometry.location.lat(),
+		longitude: place.geometry.location.lng(),
+		image: $("#photo").val(),
+		message: $("#message").val()
+	}
 
 	$.ajax({
 		type: "POST",

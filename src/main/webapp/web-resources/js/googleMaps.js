@@ -98,9 +98,14 @@ function initAutocomplete() {
 	autocomplete.addListener('place_changed', fillInAddress);
 }
 
+//added
+var place;
+
 function fillInAddress() {
 	// Get the place details from the autocomplete object.
-	var place = autocomplete.getPlace();
+	
+	//changed
+	place = autocomplete.getPlace();
 
 	for ( var component in componentForm) {
 		document.getElementById(component).value = '';
@@ -120,14 +125,23 @@ function fillInAddress() {
 	syncMapWithAddress();
 }
 
+//added
+var currLat, currLng;
 
 // Function to use the the browser's 'navigator.geolocation' object to get current location of user
 function geolocate() {
 	if (navigator.geolocation) {
+		
+		//added
+		
 		navigator.geolocation.getCurrentPosition(function(position) {
+			currLat = position.coords.latitude;
+			currLng = position.coords.longitude;
+
 			var geolocation = {
-				lat : position.coords.latitude,
-				lng : position.coords.longitude
+				//changed
+				lat : currLat,
+				lng : currLng
 			};
 
 			var circle = new google.maps.Circle({
