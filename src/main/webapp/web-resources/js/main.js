@@ -128,7 +128,8 @@ function ajaxPost() {
 
 function loginSuccess(data){
 	localStorage.setItem('firstName', data.firstName);
-	alert(localStorage.getItem('firstName'));
+	localStorage.setItem('userId', data.id);
+	alert(localStorage.getItem('userId') + " - " + localStorage.getItem('firstName') );
 	welcomeUser= "Welcome, " + localStorage.getItem('firstName');
 
 	window.location.href = 'mainPage.html';
@@ -155,5 +156,43 @@ function logout(){
 
 function reportIncident() {
 	window.location.href = 'reportIncident.html';
-	
 };
+
+function saveIncident() {
+	event.preventDefault();
+	var place = autocomplete.getPlace();
+
+	var formData = {
+			date: new Date(),
+			userId: localStorage.getItem('userId'),
+			typeId: $("#incidentType").val(),
+			verified: false,
+			latitude: place.geometry.location.lat(),
+			longitude: place.geometry.location.lng(),
+			image: $("#photo").val(),
+			message: $("#message").val() 
+		}
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url: "http://localhost:8080/incident",
+		data: JSON.stringify(formData),
+		dataType: 'json',
+
+		success: function (data, textStatus, jqXHR) {
+			alert('Incident reported successfully' + jqXHR.status);
+			window.location.href = 'mainPage.html';
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			alert('Incident report error: ' + textStatus + jqXHR.status);
+		}
+	});
+
+};
+
+
+
+
+
+

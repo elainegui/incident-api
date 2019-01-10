@@ -1,38 +1,30 @@
 <html>
 
 <head>
-<!-- meta tags -->
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Main Page</title>
+	<!-- meta tags -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Report Incident</title>
 
-<link rel="stylesheet" type="text/css" href="styles/maps.css">
+	<link rel="stylesheet" type="text/css" href="styles/maps.css">
 
-<!-- Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-	crossorigin="anonymous">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
 
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-	crossorigin="anonymous"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-	integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-	crossorigin="anonymous"></script>
-<script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-	crossorigin="anonymous"></script>
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	 crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+	 crossorigin="anonymous"></script>
 
-<script src="js/googleMaps.js"></script>
-<script src="js/main.js"></script>
+	<script src="js/googleMaps.js"></script>
+	<script src="js/main.js"></script>
 
-<script
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&libraries=places&callback=loadReportIncidentPage"
-	async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&libraries=places&callback=loadReportIncidentPage"
+	 async defer></script>
 
 
 </head>
@@ -57,10 +49,8 @@
 		<!--   form address google maps   -->
 
 		<div id="locationField">
-			<td class="label">Address</td> 
-			<input id="autocomplete"
-				placeholder="Type Address" type="text"
-				onblur="syncMapWithAddress()"></input>
+			<td class="label">Address</td>
+			<input id="autocomplete" placeholder="Type Address" type="text" onblur="syncMapWithAddress()"></input>
 
 			<!-- <button type="button" onclick="geolocate()">Use Current
 				Position</button> -->
@@ -70,10 +60,8 @@
 		<table id="address">
 			<tr>
 				<td class="label">Street address</td>
-				<td class="slimField"><input class="field" id="street_number"
-					disabled="true"></input></td>
-				<td class="wideField" colspan="2"><input class="field"
-					id="route" disabled="true"></input></td>
+				<td class="slimField"><input class="field" id="street_number" disabled="true"></input></td>
+				<td class="wideField" colspan="2"><input class="field" id="route" disabled="true"></input></td>
 			</tr>
 			<tr>
 				<td class="label">City</td>
@@ -81,24 +69,42 @@
                You may need to adjust it for the locations relevant to your app. See
                https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
           -->
-				<td class="wideField" colspan="3"><input class="field"
-					id="locality" disabled="true"></input></td>
+				<td class="wideField" colspan="3"><input class="field" id="locality" disabled="true"></input></td>
 			</tr>
 			<tr>
 				<td class="label">State</td>
-				<td class="slimField"><input class="field"
-					id="administrative_area_level_1" disabled="true"></input></td>
+				<td class="slimField"><input class="field" id="administrative_area_level_1" disabled="true"></input></td>
 				<td class="label">Zip code</td>
-				<td class="wideField"><input class="field" id="postal_code"
-					disabled="true"></input></td>
+				<td class="wideField"><input class="field" id="postal_code" disabled="true"></input></td>
 			</tr>
 			<tr>
 				<td class="label">Country</td>
-				<td class="wideField" colspan="3"><input class="field"
-					id="country" disabled="true"></input></td>
+				<td class="wideField" colspan="3"><input class="field" id="country" disabled="true"></input></td>
 			</tr>
 
 		</table>
+
+		<br>
+
+		<div>
+			<label for="incidentType" class="label">Type of Incident</label> 
+			<select id="incidentType">
+				<option value="0">Car Crash</option>
+				<option value="1">Faulty Traffic Light</option>
+				<option value="2">Faulty Street Light</option>
+				<option value="3">Snitching</option>
+				<option value="4">Robbery</option>
+				<option value="5">Road Work</option>
+			</select>
+
+			<label for="photo" class="label">Upload Photo</label> 
+			<input id="photo" placeholder="photo" />
+		</div>
+			
+		<label class="label" for="message">Message (optional)</label> 
+		<input placeholder="type message" type="text" id="message">
+		
+		<button type="button" class="btn btn-primary btn-block" onclick="saveIncident()">Report Incident</button>
 	</form>
 	<script type="text/javascript">
 
