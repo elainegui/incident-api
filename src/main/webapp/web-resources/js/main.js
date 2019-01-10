@@ -98,16 +98,87 @@ function loginSuccess(data) {
     localStorage.setItem('firstName', data.firstName);
     localStorage.setItem('userId', data.id);
     window.location.href = 'mainPage.html';
-};
+}
 
 function register() {
     window.location.href = 'register.html';
-};
+}
+
+function validateUserRegister() {
+    $("#validationMessage").text('');
+    return checkBlankFieldsInUserRegister() && checkPasswordConfirmationInUserRegister() &&
+        checkAddressWasChosenInUserRegister();
+}
+
+function checkAddressWasChosenInUserRegister() {
+    if ($("#country").val() === '') {
+        $("#validationMessage").text('Please start typing the address then choose the best option suggested.');
+        return false;
+    }
+    return true;
+}
+
+function checkPasswordConfirmationInUserRegister() {
+    var password = $("#password").val();
+    var confirmPassword = $("#confirmPassword").val();
+    if (password !== confirmPassword) {
+        $("#validationMessage").text('Passwords must match!');
+        return false;
+    }
+    return true;
+}
+
+
+function checkBlankFieldsInUserRegister() {
+
+    var invalidFields = [];
+
+    if ($("#firstName").val() === '') {
+        invalidFields.push('First Name');
+    }
+
+    if ($("#lastName").val() === '') {
+        invalidFields.push('Last Name');
+    }
+
+    if ($("#autocomplete").val() === '') {
+        invalidFields.push('Address');
+    }
+
+    if ($("#email").val() === '') {
+        invalidFields.push('E-mail address');
+    }
+
+    if ($("#password").val() === '') {
+        invalidFields.push('Password');
+    }
+
+    if ($("#confirmPassword").val() === '') {
+        invalidFields.push('Confirm Password');
+    }
+
+    if (invalidFields.length > 0) {
+        var errorMessage = 'Please provide information for the following fields: ';
+        var fields = '';
+        $.each(invalidFields, function (index, value) {
+            fields += ", " + value;
+        });
+        fields = fields.substr(2);
+        errorMessage += fields;
+        $("#validationMessage").text(errorMessage);
+        return false;
+    }
+
+    return true;
+}
 
 var userRegister = function () {
     // Prevent the form from submitting via the browser.
     event.preventDefault();
-    registerUserAjaxPost();
+
+    if (validateUserRegister()) {
+        registerUserAjaxPost();
+    }
 };
 
 function logout() {
