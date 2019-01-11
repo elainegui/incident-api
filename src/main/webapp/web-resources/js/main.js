@@ -167,6 +167,7 @@ var userRegister = function () {
 
     if (validateUserRegister()) {
         registerUserAjaxPost();
+        $("#registrationForm")[0].reset();
     }
 };
 
