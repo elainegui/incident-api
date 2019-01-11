@@ -44,13 +44,14 @@
 
 
                 <!--   form address google maps   -->
+
+
+                <div class="form-group" id="locationField">
+                    <td class="label">Address</td>
+                    <input id="autocomplete" onFocus="geolocate()" placeholder="Enter your address" type="text" />
+                </div>
+
                 <div id="address">
-
-                    <div class="form-group" id="locationField">
-                        <td class="label">Address</td>
-                        <input id="autocomplete" onFocus="geolocate()" placeholder="Enter your address" type="text" />
-                    </div>
-
 
                     <div class="form-group" id="address">
                         <div>
@@ -85,7 +86,7 @@
 
                 <div class="form-group">
                     <label for="email">E-mail address</label>
-                    <input class="form-control" id="email" placeholder="user@example.com" required="required" type="email" />
+                    <input class="form-control" type="email" id="email" placeholder="user@example.com" required="required" type="email" />
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>

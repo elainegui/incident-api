@@ -22,10 +22,13 @@ function login() {
     validateLogin();
 };
 
+//validate button
 var validateLogin = function () {
     var userId = $('#userid').val();
     var password = $('#password').val();
 
+
+if(userId!==""||password!==""){
     $.ajax({
         type: 'GET',
         url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
@@ -39,6 +42,9 @@ var validateLogin = function () {
             $("#validationMessage").text("invalid login/ password");
         }
     });
+}else{
+    $("#validationMessage").text("Please fill in the fields");
+}
 };
 
 function registerUserAjaxPost() {
@@ -86,6 +92,7 @@ function registerUserAjaxPost() {
 function loginSuccess(data) {
     localStorage.setItem('firstName', data.firstName);
     localStorage.setItem('userId', data.id);
+    $("#loginForm")[0].reset();
     window.location.href = 'mainPage.html';
 }
 
