@@ -1,32 +1,21 @@
 $(document).ready(function () {
-
-    if (localStorage.getItem("firstName")) {
-        $("#welcome").text('Welcome, ' + localStorage.getItem("firstName"));
-    } else {
+    var username = localStorage.getItem("firstName");
+    if (username === null) {
         $("#welcome").text('Welcome');
+    } else {
+        $("#welcome").text('Welcome, ' + localStorage.getItem("firstName"));
     }
-
-    //TODO verify how loginVar is being set and what it does
-    var loginVar = localStorage.getItem('loginVar');
-
-    if (loginVar == 0) {
+    if (username === null) {
         $('#loginButton').show();
         $('#logoutButton').hide();
         $('#registerButton').show();
-    } else if (loginVar == 1) {
+    } else {
         $('#loginButton').hide();
         $('#logoutButton').show();
         $('#registerButton').hide();
-    } else {
-        $('#loginButton').show();
-        $('#logoutButton').hide();
-        $('#registerButton').show();
     }
-
 });
 
-//TODO verify how loginVar is being set and what it does
-var loginVar = localStorage.getItem('loginVar');
 
 function login() {
     window.location.href = 'login.html';
@@ -183,9 +172,8 @@ var userRegister = function () {
 
 function logout() {
 
-    localStorage.setItem('firstName', "");
-
-    $("#welcome").val("");
+    localStorage.removeItem('firstName');
+    localStorage.removeItem('userId');
     window.location.reload(true);
 };
 
