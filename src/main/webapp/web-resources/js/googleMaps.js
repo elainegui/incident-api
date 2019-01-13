@@ -181,7 +181,7 @@ function syncMapWithAddress() {
     }
 }
 
-function defineIconMaps() {
+function defineIconPaths() {
     var iconBasePath = 'mapicons/';
     return [
         iconBasePath + 'burning-car.png',
@@ -194,7 +194,7 @@ function defineIconMaps() {
 }
 
 function plotIncidents(incidents) {
-    var icons = defineIconMaps();
+    var icons = defineIconPaths();
     $.each(incidents, function(index, incident) {
        var marker = new google.maps.Marker({
            position: new google.maps.LatLng(incident.latitude, incident.longitude),
