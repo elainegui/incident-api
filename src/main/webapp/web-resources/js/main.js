@@ -1,18 +1,18 @@
 $(document).ready(function () {
     var username = localStorage.getItem("firstName");
+    console.log("Rodrigo: " + $('#logoutTab').text() );
     if (username === null) {
-        $("#welcome").text('Welcome');
+        $('#loginTab').show();
+        $('#logoutTab').text('Log out');
+        $('#logoutTab').hide();
+        $('#registerTab').show();
+        $('#myIncidentsTab').hide();
     } else {
-        $("#welcome").text('Welcome, ' + localStorage.getItem("firstName"));
-    }
-    if (username === null) {
-        $('#loginButton').show();
-        $('#logoutButton').hide();
-        $('#registerButton').show();
-    } else {
-        $('#loginButton').hide();
-        $('#logoutButton').show();
-        $('#registerButton').hide();
+        $('#loginTab').hide();
+        $('#logoutTab').text(localStorage.getItem("firstName") + ' | Log out');
+        $('#logoutTab').show();
+        $('#registerTab').hide();
+        $('#myIncidentsTab').show();
     }
 
     //navbar functions calling
@@ -31,23 +31,11 @@ $(document).ready(function () {
         logout(); 
     });
 
-    //change active tab according to current page
-
-    // $('.navbar-nav li a').on("click", (function(){
-    //     $('ul.navbar-nav li.active').removeClass('active');
-    //     $(this).addClass('active');
-    //   }));
-
-    // $('.navbar-nav').click(function(){
-    //     $('.navbar-nav li').removeClass('active');
-    //     $(this).addClass('active');
-    // })
 });
 
 
 function login() {
     window.location.href = 'login.html';
-    validateLogin();
 };
 
 //validate button
@@ -55,24 +43,23 @@ var validateLogin = function () {
     var userId = $('#userid').val();
     var password = $('#password').val();
 
+    if(userId!==""||password!==""){
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                loginSuccess(data);
+            },
 
-if(userId!==""||password!==""){
-    $.ajax({
-        type: 'GET',
-        url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
-        dataType: "json",
-        async: false,
-        success: function (data) {
-            loginSuccess(data);
-        },
-
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            $("#validationMessage").text("invalid login/ password");
-        }
-    });
-}else{
-    $("#validationMessage").text("Please fill in the fields");
-}
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $("#validationMessage").text("invalid login/ password");
+            }
+        });
+    }else{
+        $("#validationMessage").text("Please fill in the fields");
+    }
 };
 
 function registerUserAjaxPost() {
