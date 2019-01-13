@@ -227,11 +227,11 @@ function saveIncident() {
         dataType: 'json',
 
         success: function (data, textStatus, jqXHR) {
-            alert('Incident reported successfully' + jqXHR.status);
+            alert('Incident reported successfully');
             window.location.href = 'mainPage.html';
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert('Incident report error: ' + textStatus + jqXHR.status);
+            alert('Incident report error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
         }
     });
 

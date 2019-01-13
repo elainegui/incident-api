@@ -35,9 +35,9 @@ public class UserRegisterController {
 //    }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<String> createUserRegister(@RequestBody UserRegister userRegister) {
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void createUserRegister(@RequestBody UserRegister userRegister) {
         userRegisterRepository.save(userRegister);
-        return new ResponseEntity<>("OK", HttpStatus.NO_CONTENT);
     }
 
 
