@@ -7,8 +7,8 @@ function loadReportIncidentPage() {
 
 function initMap() {
     var location = {
-        lat : 53.4239,
-        lng : -7.9407
+        lat : 53.418354,
+        lng : -7.903726
     };
     map = new google.maps.Map(document.getElementById("map"), {
         zoom : 16,
@@ -181,3 +181,25 @@ function syncMapWithAddress() {
     }
 }
 
+function defineIconMaps() {
+    var iconBasePath = 'mapicons/';
+    return [
+        iconBasePath + 'burning-car.png',
+        iconBasePath + 'semaphore.png',
+        iconBasePath + 'street-light.png',
+        iconBasePath + 'theft.png',
+        iconBasePath + 'robbery.png',
+        iconBasePath + 'road-work.png'
+    ];
+}
+
+function plotIncidents(incidents) {
+    var icons = defineIconMaps();
+    $.each(incidents, function(index, incident) {
+       var marker = new google.maps.Marker({
+           position: new google.maps.LatLng(incident.latitude, incident.longitude),
+           icon: icons[incident.typeId],
+           map: map
+       });
+    });
+}

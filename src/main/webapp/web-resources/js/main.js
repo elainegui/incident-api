@@ -1,6 +1,5 @@
 $(document).ready(function () {
     var username = localStorage.getItem("firstName");
-    console.log("Rodrigo: " + $('#logoutTab').text() );
     if (username === null) {
         $('#loginTab').show();
         $('#logoutTab').text('Log out');
@@ -36,7 +35,7 @@ $(document).ready(function () {
 
 function login() {
     window.location.href = 'login.html';
-};
+}
 
 //validate button
 var validateLogin = function () {
@@ -85,7 +84,7 @@ function registerUserAjaxPost() {
         userLatitude: latitude,
         userLongitude: longitude
 
-    }
+    };
     // DO POST
     $.ajax({
         type: "POST",
@@ -198,11 +197,11 @@ function logout() {
     localStorage.removeItem('firstName');
     localStorage.removeItem('userId');
     window.location.reload(true);
-};
+}
 
 function reportIncident() {
     window.location.href = 'reportIncident.html';
-};
+}
 
 function saveIncident() {
     event.preventDefault();
@@ -217,7 +216,7 @@ function saveIncident() {
         longitude: place.geometry.location.lng(),
         image: $("#photo").val(),
         message: $("#message").val()
-    }
+    };
 
     $.ajax({
         type: "POST",
@@ -235,9 +234,22 @@ function saveIncident() {
         }
     });
 
+}
+
+var loadIncidents = function () {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: "http://localhost:8080/incident",
+        success: function (data, textStatus, jqXHR) {
+            plotIncidents(data);
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('incidents load error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
+        }
+    });
 };
-
-
 
 
 

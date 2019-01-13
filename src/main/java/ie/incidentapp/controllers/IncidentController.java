@@ -34,4 +34,10 @@ public class IncidentController {
         incidentRepository.save(incident);
     }
 
+    @RequestMapping(value = "/incident", method = RequestMethod.GET)
+    public Iterable<Incident> listAllIncidents() {
+        return incidentRepository.findAll();
+    }
+
+
 }
