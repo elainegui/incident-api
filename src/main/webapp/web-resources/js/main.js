@@ -14,6 +14,34 @@ $(document).ready(function () {
         $('#logoutButton').show();
         $('#registerButton').hide();
     }
+
+    //navbar functions calling
+    $('#loginTab').on('click', function(e) {
+        e.preventDefault();   
+        login(); 
+        });
+
+    $('#registerTab').on('click', function(e) {
+        e.preventDefault();   
+        register(); 
+    });
+
+    $('#logoutTab').on('click', function(e) {
+        e.preventDefault();   
+        logout(); 
+    });
+
+    //change active tab according to current page
+
+    // $('.navbar-nav li a').on("click", (function(){
+    //     $('ul.navbar-nav li.active').removeClass('active');
+    //     $(this).addClass('active');
+    //   }));
+
+    // $('.navbar-nav').click(function(){
+    //     $('.navbar-nav li').removeClass('active');
+    //     $(this).addClass('active');
+    // })
 });
 
 

@@ -1,5 +1,6 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
+	
 <head>
 	<!-- meta tags -->
 	<meta charset="utf-8">
@@ -7,21 +8,26 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Report Incident</title>
 
+	<link rel="stylesheet" type="text/css" href="styles/mainStyle.css">
 	<link rel="stylesheet" type="text/css" href="styles/maps.css">
 
 	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-	 crossorigin="anonymous">
-
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous"> -->
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	
+	 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-	 crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-	 crossorigin="anonymous"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	 crossorigin="anonymous"></script> -->
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+	 crossorigin="anonymous"></script> -->
 
 	<script src="js/googleMaps.js"></script>
 	<script src="js/main.js"></script>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&libraries=places&callback=loadReportIncidentPage"
 	 async defer></script>
@@ -30,6 +36,45 @@
 </head>
 
 <body>
+
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Incident APP</a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav" id=navtab>
+					<li class="active"><a href="mainPage.html">Home</a></li>
+					<li><a href="reportIncident.html">Report Incident</a></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">View Incidents<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">My Incidents History</a></li>
+							<li><a href="#">View Trends</a></li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" id=registerTab><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+					<li><a href="#" id=loginTab><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+					<li><a href="#" id=logoutTab><span class="glyphicon glyphicon-log-in"></span> Log out</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<h3>Collapsible Navbar</h3>
+		<p>In this example, the navigation bar is hidden on small screens and replaced by a button in the top right corner
+			(try to re-size this window).
+			<p>Only when the button is clicked, the navigation bar will be displayed.</p>
+	</div>
+
 
 	<h1 id="header1">Incident APP</h1>
 
@@ -87,7 +132,7 @@
 		<br>
 
 		<div>
-			<label for="incidentType" class="label">Type of Incident</label> 
+			<label for="incidentType" class="label">Type of Incident</label>
 			<select id="incidentType">
 				<option value="0">Car Crash</option>
 				<option value="1">Faulty Traffic Light</option>
@@ -97,13 +142,13 @@
 				<option value="5">Road Work</option>
 			</select>
 
-			<label for="photo" class="label">Upload Photo</label> 
+			<label for="photo" class="label">Upload Photo</label>
 			<input id="photo" placeholder="photo" />
 		</div>
-			
-		<label class="label" for="message">Message (optional)</label> 
+
+		<label class="label" for="message">Message (optional)</label>
 		<input placeholder="type message" type="text" id="message">
-		
+
 		<button type="button" class="btn btn-primary btn-block" onclick="saveIncident()">Report Incident</button>
 	</form>
 	<script type="text/javascript">
