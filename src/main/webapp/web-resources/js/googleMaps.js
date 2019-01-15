@@ -196,10 +196,33 @@ function defineIconPaths() {
 function plotIncidents(incidents) {
     var icons = defineIconPaths();
     $.each(incidents, function(index, incident) {
-       var marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
            position: new google.maps.LatLng(incident.latitude, incident.longitude),
-           icon: icons[incident.typeId],
+           icon: icons[incident.type.id],
            map: map
        });
+       var infoWindow = new google.maps.InfoWindow({
+           content: createInfoWindowContentForIncident(incident)
+       });
+       marker.addListener('click', function () {
+           infoWindow.open(map, marker);
+       });
     });
+}
+
+function createInfoWindowContentForIncident(incident) {
+    // ` denotes JavaScript ECMA 6 template string
+    var content =
+        `<div>` +
+        `    <div>` +
+        `        ${incident.type.description} incident <br/>` +
+        `        ${incident.image} <br/>` +
+        `        ${incident.message} <br/>` +
+        `        ${incident.date}` +
+        `    </div>` +
+        `</div>`;
+    return content;
+
+
+
 }

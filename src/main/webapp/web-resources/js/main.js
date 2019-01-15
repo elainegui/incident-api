@@ -207,10 +207,14 @@ function saveIncident() {
     event.preventDefault();
     var place = autocomplete.getPlace();
 
+    var typeData = {
+        id: $("#incidentType").val()
+    }
+
     var formData = {
         date: new Date(),
         userId: localStorage.getItem('userId'),
-        typeId: $("#incidentType").val(),
+        type: typeData,
         verified: false,
         latitude: place.geometry.location.lat(),
         longitude: place.geometry.location.lng(),
