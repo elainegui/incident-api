@@ -220,9 +220,7 @@ function createInfoWindowContentForIncident(incident) {
         `        ${incident.message} <br/>` +
         `        ${incident.date}` +
         `    </div>` +
-        `</div>`;
+        `</div>`+ "<br><div><input type='submit' id='newReportOnMarker' value='Report a New Incident in this Place' onclick='reportNewIncidentOnMarker()'></div>";
     return content;
-
-
-
 }
+
