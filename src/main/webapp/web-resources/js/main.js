@@ -203,21 +203,20 @@ function reportIncident() {
     window.location.href = 'reportIncident.html';
 }
 
-function saveIncident() {
+function saveIncident(latitude, longitude) {
     event.preventDefault();
-    var place = autocomplete.getPlace();
-
     var typeData = {
-        id: $("#incidentType").val()
-    }
+        id: $("#incidentType").val(),
+        description: $("#incidentType option:selected").text()
+    };
 
-    var formData = {
+    var incidentData = {
         date: new Date(),
         userId: localStorage.getItem('userId'),
         type: typeData,
         verified: false,
-        latitude: place.geometry.location.lat(),
-        longitude: place.geometry.location.lng(),
+        latitude: latitude,
+        longitude: longitude,
         image: $("#photo").val(),
         message: $("#message").val()
     };
@@ -226,12 +225,11 @@ function saveIncident() {
         type: "POST",
         contentType: "application/json",
         url: "http://localhost:8080/incident",
-        data: JSON.stringify(formData),
+        data: JSON.stringify(incidentData),
         dataType: 'json',
 
         success: function (data, textStatus, jqXHR) {
-            alert('Incident reported successfully');
-            window.location.href = 'mainPage.html';
+            plotIncident(incidentData);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Incident report error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
@@ -247,14 +245,11 @@ var loadIncidents = function () {
         url: "http://localhost:8080/incident",
         success: function (data, textStatus, jqXHR) {
             plotIncidents(data);
-
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('incidents load error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
         }
     });
 };
-
-
 
 

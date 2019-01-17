@@ -1,4 +1,5 @@
 var map, infoWindow;
+var incidentIcons = defineIconPaths();
 
 function loadReportIncidentPage() {
     initMap();
@@ -14,7 +15,10 @@ function initMap() {
         zoom: 16,
         center: location
     });
-    infoWindow = new google.maps.InfoWindow;
+
+    google.maps.event.addListener(map, 'click', function (event) {
+        reportNewIncidentOnMarker(event.latLng.lat(), event.latLng.lng());
+    });
 
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
@@ -24,9 +28,11 @@ function initMap() {
                 lng: position.coords.longitude
             };
 
+/*
+            infoWindow = new google.maps.InfoWindow;
             infoWindow.setPosition(pos);
             infoWindow.setContent('Your Location');
-            infoWindow.open(map);
+            infoWindow.open(map);*/
             map.setCenter(pos);
         }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
@@ -151,29 +157,7 @@ function geolocate() {
         });
     }
 }
-/*
-function geocodeAddress(geocoder, resultsMap) {
-	var address = document.getElementById('autocomplete').value;
-	if (address) {
-		console.log("address: " + address);
-		geocoder.geocode({
-			'address' : address
-		}, function(results, status) {
-			if (status === 'OK') {
-				resultsMap.setCenter(results[0].geometry.location);
-				var marker = new google.maps.Marker({
-					map : resultsMap,
-					position : results[0].geometry.location
-				});
-			} else {
-				alert('Geocode was not successful for the following reason: '
-						+ status);
-			}
-		});
-	}
-}
 
-*/
 function syncMapWithAddress() {
     if (map) {
         var geocoder = new google.maps.Geocoder();
@@ -193,23 +177,23 @@ function defineIconPaths() {
     ];
 }
 
-//added
-var infoWindow;
+function plotIncident(incident) {
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(incident.latitude, incident.longitude),
+        icon: incidentIcons[incident.type.id],
+        map: map
+    });
+    infoWindow = new google.maps.InfoWindow({
+        content: createInfoWindowContentForIncident(incident)
+    });
+    marker.addListener('click', function () {
+        infoWindow.open(map, marker);
+    });
+}
 
 function plotIncidents(incidents) {
-    var icons = defineIconPaths();
     $.each(incidents, function (index, incident) {
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(incident.latitude, incident.longitude),
-            icon: icons[incident.type.id],
-            map: map
-        });
-        infoWindow = new google.maps.InfoWindow({
-            content: createInfoWindowContentForIncident(incident)
-        });
-        marker.addListener('click', function () {
-            infoWindow.open(map, marker);
-        });
+        plotIncident(incident);
     });
 }
 
@@ -223,15 +207,13 @@ function createInfoWindowContentForIncident(incident) {
         `        ${incident.message} <br/>` +
         `        ${incident.date}` +
         `    </div>` +
-        `</div>` + `<br><div><input type='submit' id='newReportOnMarker' value='Report a New Incident in this Place' onclick='reportNewIncidentOnMarker()'></div>`;
+        `</div>`;
     return content;
 }
 
 
-function reportNewIncidentOnMarker() {
+function reportNewIncidentOnMarker(latitude, longitude) {
     infoWindow.close();
-    // $("body").append(`<div id='dialog' title='Basic dialog'></div>`);
-
     $(function () {
         $("#newIncidentForm").dialog({
             modal: true,
@@ -242,8 +224,8 @@ function reportNewIncidentOnMarker() {
             dialogClass: 'ui-dialog-osx',
             buttons: {
                 "Report": function() {
+                    saveIncident(latitude, longitude);
                     $(this).dialog("close");
-                    alert("incident reported successfully! report n. xxxxxx");
                 },
                 "Close": function() {
                     $(this).dialog('close');
