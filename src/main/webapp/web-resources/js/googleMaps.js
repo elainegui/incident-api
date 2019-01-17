@@ -203,7 +203,7 @@ function createInfoWindowContentForIncident(incident) {
         `<div>` +
         `    <div>` +
         `        ${incident.type.description} incident <br/>` +
-        `        <img src="${incident.image}" />  <br/>` +
+        `        <img src="${incident.image}" width="200px"/>  <br/>` +
         `        ${incident.message} <br/>` +
         `        ${incident.date}` +
         `    </div>` +
