@@ -203,7 +203,7 @@ function createInfoWindowContentForIncident(incident) {
         `<div>` +
         `    <div>` +
         `        ${incident.type.description} incident <br/>` +
-        `        ${incident.image} <br/>` +
+        `        <img src="${incident.image}" />  <br/>` +
         `        ${incident.message} <br/>` +
         `        ${incident.date}` +
         `    </div>` +
@@ -213,7 +213,9 @@ function createInfoWindowContentForIncident(incident) {
 
 
 function reportNewIncidentOnMarker(latitude, longitude) {
-    infoWindow.close();
+    if (infoWindow != null) {
+        infoWindow.close();
+    }
     $(function () {
         $("#newIncidentForm").dialog({
             modal: true,

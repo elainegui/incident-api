@@ -217,7 +217,7 @@ function saveIncident(latitude, longitude) {
         verified: false,
         latitude: latitude,
         longitude: longitude,
-        image: $("#photo").val(),
+        image: $("#photoBase64").val(),
         message: $("#message").val()
     };
 

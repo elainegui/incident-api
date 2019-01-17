@@ -82,7 +82,8 @@
         </div>
         <div>
             <label for="photo">Upload Photo</label>
-            <input id="photo" placeholder="photo"/>
+            <input id="photo" placeholder="photo" type="file"/>
+            <input type="hidden" id="photoBase64" />
         </div>
         <div>
             <label for="message">Message (optional)</label>
@@ -96,6 +97,30 @@
     $(document).ready(function () {
         loadIncidents();
     });
+
+    $("#photo").on('change', function () {
+        readImage($(this)).done(function (base64Data) {
+            $('#photoBase64').val(base64Data);
+        });
+    });
+
+    function readImage(inputElement) {
+        var deferred = $.Deferred();
+
+        var files = inputElement.get(0).files;
+
+        if (files && files[0]) {
+            var fr = new FileReader();
+            fr.onload = function (e) {
+                deferred.resolve(e.target.result);
+            };
+            fr.readAsDataURL(files[0]);
+        } else {
+            deferred.resolve(undefined);
+        }
+
+        return deferred.promise();
+    }
 
 </script>
 

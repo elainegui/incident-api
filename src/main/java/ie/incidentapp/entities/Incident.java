@@ -18,6 +18,7 @@ public class Incident {
     private boolean verified;
     private float latitude;
     private float longitude;
+    @Lob
     private String image;
     private String message;
 
