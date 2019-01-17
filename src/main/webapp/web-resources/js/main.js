@@ -199,10 +199,6 @@ function logout() {
     window.location.reload(true);
 }
 
-function reportIncident() {
-    window.location.href = 'reportIncident.html';
-}
-
 function saveIncident(latitude, longitude) {
     event.preventDefault();
     var typeData = {
