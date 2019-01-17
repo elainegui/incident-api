@@ -7,28 +7,28 @@ function loadReportIncidentPage() {
 
 function initMap() {
     var location = {
-        lat : 53.418354,
-        lng : -7.903726
+        lat: 53.418354,
+        lng: -7.903726
     };
     map = new google.maps.Map(document.getElementById("map"), {
-        zoom : 16,
-        center : location
+        zoom: 16,
+        center: location
     });
     infoWindow = new google.maps.InfoWindow;
 
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             var pos = {
-                lat : position.coords.latitude,
-                lng : position.coords.longitude
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
             };
 
             infoWindow.setPosition(pos);
             infoWindow.setContent('Your Location');
             infoWindow.open(map);
             map.setCenter(pos);
-        }, function() {
+        }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
         });
     } else {
@@ -50,13 +50,13 @@ function geocodeAddress(geocoder, resultsMap) {
     if (address) {
         console.log("address: " + address);
         geocoder.geocode({
-            'address' : address
-        }, function(results, status) {
+            'address': address
+        }, function (results, status) {
             if (status === 'OK') {
                 resultsMap.setCenter(results[0].geometry.location);
                 var marker = new google.maps.Marker({
-                    map : resultsMap,
-                    position : results[0].geometry.location
+                    map: resultsMap,
+                    position: results[0].geometry.location
                 });
             } else {
                 alert('Geocode was not successful for the following reason: '
@@ -76,12 +76,12 @@ function geocodeAddress(geocoder, resultsMap) {
 
 var placeSearch, autocomplete;
 var componentForm = {
-    street_number : 'short_name',
-    route : 'long_name',
-    locality : 'long_name',
-    administrative_area_level_1 : 'short_name',
-    country : 'long_name',
-    postal_code : 'short_name'
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    administrative_area_level_1: 'short_name',
+    country: 'long_name',
+    postal_code: 'short_name'
 };
 
 function initAutocomplete() {
@@ -90,7 +90,7 @@ function initAutocomplete() {
     autocomplete = new google.maps.places.Autocomplete(
         /** @type {!HTMLInputElement} */
         (document.getElementById('autocomplete')), {
-            types : [ 'geocode' ]
+            types: ['geocode']
         });
 
     // When the user selects an address from the dropdown, populate the address
@@ -107,7 +107,7 @@ function fillInAddress() {
     //changed
     place = autocomplete.getPlace();
 
-    for ( var component in componentForm) {
+    for (var component in componentForm) {
         document.getElementById(component).value = '';
     }
 
@@ -133,19 +133,19 @@ function geolocate() {
 
         //added
 
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             currLat = position.coords.latitude;
             currLng = position.coords.longitude;
 
             var geolocation = {
                 //changed
-                lat : currLat,
-                lng : currLng
+                lat: currLat,
+                lng: currLng
             };
 
             var circle = new google.maps.Circle({
-                center : geolocation,
-                radius : position.coords.accuracy
+                center: geolocation,
+                radius: position.coords.accuracy
             });
             autocomplete.setBounds(circle.getBounds());
         });
@@ -193,20 +193,23 @@ function defineIconPaths() {
     ];
 }
 
+//added
+var infoWindow;
+
 function plotIncidents(incidents) {
     var icons = defineIconPaths();
-    $.each(incidents, function(index, incident) {
+    $.each(incidents, function (index, incident) {
         var marker = new google.maps.Marker({
-           position: new google.maps.LatLng(incident.latitude, incident.longitude),
-           icon: icons[incident.type.id],
-           map: map
-       });
-       var infoWindow = new google.maps.InfoWindow({
-           content: createInfoWindowContentForIncident(incident)
-       });
-       marker.addListener('click', function () {
-           infoWindow.open(map, marker);
-       });
+            position: new google.maps.LatLng(incident.latitude, incident.longitude),
+            icon: icons[incident.type.id],
+            map: map
+        });
+        infoWindow = new google.maps.InfoWindow({
+            content: createInfoWindowContentForIncident(incident)
+        });
+        marker.addListener('click', function () {
+            infoWindow.open(map, marker);
+        });
     });
 }
 
@@ -220,7 +223,33 @@ function createInfoWindowContentForIncident(incident) {
         `        ${incident.message} <br/>` +
         `        ${incident.date}` +
         `    </div>` +
-        `</div>`+ "<br><div><input type='submit' id='newReportOnMarker' value='Report a New Incident in this Place' onclick='reportNewIncidentOnMarker()'></div>";
+        `</div>` + `<br><div><input type='submit' id='newReportOnMarker' value='Report a New Incident in this Place' onclick='reportNewIncidentOnMarker()'></div>`;
     return content;
 }
 
+
+function reportNewIncidentOnMarker() {
+    infoWindow.close();
+    // $("body").append(`<div id='dialog' title='Basic dialog'></div>`);
+
+    $(function () {
+        $("#newIncidentForm").dialog({
+            modal: true,
+            resizable: true,
+            show: 'blind',
+            hide: 'blind',
+            width: 400,
+            dialogClass: 'ui-dialog-osx',
+            buttons: {
+                "Report": function() {
+                    $(this).dialog("close");
+                    alert("incident reported successfully! report n. xxxxxx");
+                },
+                "Close": function() {
+                    $(this).dialog('close');
+                }
+            }
+        });
+    });
+
+}

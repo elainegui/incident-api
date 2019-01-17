@@ -13,10 +13,17 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!--window popup-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script crossorigin="anonymous" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- //window popup -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -57,9 +64,62 @@
 <h2 id="reportpageHeader2">Incidents</h2>
 <div id="map"></div>
 
+<!--report dialog box content-->
+<div id="newIncidentForm" title="New Incident" style="display:none;">
+
+  <table id="address">
+    <tr>
+        <td class="label">Street address</td>
+        <td class="slimField"><input class="field" id="street_number" disabled="disabled"/></td>
+        <td class="wideField" colspan="2"><input class="field" id="route" disabled="disabled"/></td>
+    </tr>
+    <tr>
+        <td class="label">City</td>
+        <!-- Note: Selection of address components in this example is typical.
+       You may need to adjust it for the locations relevant to your app. See
+       https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
+  -->
+        <td class="wideField" colspan="3"><input class="field" id="locality" disabled="disabled"/></td>
+    </tr>
+    <tr>
+        <td class="label">State</td>
+        <td class="slimField"><input class="field" id="administrative_area_level_1" disabled="disabled"/></td>
+        <td class="label">Zip code</td>
+        <td class="wideField"><input class="field" id="postal_code" disabled="disabled"/></td>
+    </tr>
+    <tr>
+        <td class="label">Country</td>
+        <td class="wideField" colspan="3"><input class="field" id="country" disabled="disabled"/></td>
+    </tr>
+
+</table>
+
+<br>
+
+<div>
+    <label for="incidentType" class="label">Type of Incident</label>
+    <select id="incidentType">
+        <option value="0">Car Crash</option>
+        <option value="1">Faulty Traffic Light</option>
+        <option value="2">Faulty Street Light</option>
+        <option value="3">Snitching</option>
+        <option value="4">Robbery</option>
+        <option value="5">Road Work</option>
+    </select>
+
+    <label for="photo" class="label">Upload Photo</label>
+    <input id="photo" placeholder="photo" />
+</div>
+
+<label class="label" for="message">Message (optional)</label>
+<input placeholder="type message" type="text" id="message">
+
+<button type="button" class="btn btn-primary btn-block" onclick="saveIncident()">Report Incident</button>
+</form>
+
+</div>
 
 <script>
-
     $(document).ready(function () {
       loadIncidents();
     });
