@@ -130,11 +130,13 @@ function fillInAddress() {
     syncMapWithAddress();
 }
 
-//added
-var currLat, currLng;
+
 
 // Function to use the the browser's 'navigator.geolocation' object to get current location of user
 function geolocate() {
+    //added
+    var currLat, currLng;
+    
     if (navigator.geolocation) {
 
         //added
@@ -177,13 +179,14 @@ function defineIconPaths() {
     ];
 }
 
+//changed
 function plotIncident(incident) {
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(incident.latitude, incident.longitude),
         icon: incidentIcons[incident.type.id],
         map: map
     });
-    infoWindow = new google.maps.InfoWindow({
+    var infoWindow = new google.maps.InfoWindow({
         content: createInfoWindowContentForIncident(incident)
     });
     marker.addListener('click', function () {
@@ -207,7 +210,8 @@ function createInfoWindowContentForIncident(incident) {
         `        ${incident.message} <br/>` +
         `        ${incident.date}` +
         `    </div>` +
-        `</div>`;
+        `</div>`+
+        `<button type="button" id="newIncidentonMarkerButton" onclick="">Report New Incident on this Location</button>`;
     return content;
 }
 
