@@ -38,7 +38,8 @@ function initMap() {
             //add marker on current position
             var markerCurrentPosition = new google.maps.Marker({
                 position: pos,
-                map: map
+                map: map,
+                icon: 'icons/user-pink-32.png'
             });
 
         }, function () {
