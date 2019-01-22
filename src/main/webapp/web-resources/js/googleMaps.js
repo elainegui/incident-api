@@ -212,14 +212,14 @@ function plotIncidents(incidents) {
     });
 }
 
+//changed style message infowindow
 function createInfoWindowContentForIncident(incident) {
     // ` denotes JavaScript ECMA 6 template string
     var content =
         `<div>` +
-        `    <div>` +
-        `        ${incident.type.description} incident <br/>` +
+        `    <div class= "incidentInfoWindow">` +
+        `       ${incident.message}<br/>` +
         `        <img src="${incident.image}" width="200px"/>  <br/>` +
-        `        ${incident.message} <br/>` +
         `        ${incident.date}` +
         `    </div>` +
         `</div>`+

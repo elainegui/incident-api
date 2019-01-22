@@ -42,3 +42,8 @@ body{
     font-size: 15px;
     font-weight: bold;
 }
+.incidentInfoWindow{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    color: darkblue;
+}
