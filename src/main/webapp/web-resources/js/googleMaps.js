@@ -192,6 +192,10 @@ function plotIncident(incident) {
     marker.addListener('click', function () {
         infoWindow.open(map, marker);
     });
+    //added
+    google.maps.event.addListener(marker, "dblclick", function (e) { 
+        console.log("marker db click"); 
+     });
 }
 
 function plotIncidents(incidents) {
@@ -211,15 +215,13 @@ function createInfoWindowContentForIncident(incident) {
         `        ${incident.date}` +
         `    </div>` +
         `</div>`+
-        `<button type="button" id="newIncidentonMarkerButton" onclick="">Report New Incident on this Location</button>`;
+        `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
     return content;
 }
 
 
 function reportNewIncidentOnMarker(latitude, longitude) {
-    if (infoWindow != null) {
-        infoWindow.close();
-    }
+    //TODO close info windows??
     $(function () {
         $("#newIncidentForm").dialog({
             modal: true,

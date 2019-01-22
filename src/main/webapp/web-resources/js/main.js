@@ -226,6 +226,10 @@ function saveIncident(latitude, longitude) {
 
         success: function (data, textStatus, jqXHR) {
             plotIncident(incidentData);
+            $("#incidentType").val('');
+            $("#photoBase64").val('');
+            $("#message").val('')
+
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Incident report error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
