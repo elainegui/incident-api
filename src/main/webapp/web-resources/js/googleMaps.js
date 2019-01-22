@@ -34,6 +34,13 @@ function initMap() {
             infoWindow.setContent('Your Location');
             infoWindow.open(map);*/
             map.setCenter(pos);
+            
+            //add marker on current position
+            var markerCurrentPosition = new google.maps.Marker({
+                position: pos,
+                map: map
+            });
+
         }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
         });
