@@ -28,11 +28,6 @@ function initMap() {
                 lng: position.coords.longitude
             };
 
-/*
-            infoWindow = new google.maps.InfoWindow;
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Your Location');
-            infoWindow.open(map);*/
             map.setCenter(pos);
             
             //add marker on current position
@@ -138,8 +133,6 @@ function fillInAddress() {
     syncMapWithAddress();
 }
 
-
-
 // Function to use the the browser's 'navigator.geolocation' object to get current location of user
 function geolocate() {
     //added
@@ -218,35 +211,13 @@ function createInfoWindowContentForIncident(incident) {
         `<div>` +
         `    <div class= "incidentInfoWindow">` +
         `       ${incident.message}<br/>` +
-        //add id img
-        `        <img id="${incident.id}" class="imgModal" src="${incident.image}" width="50px" onclick=openModalBox()></img>  <br/>` +
+        `        <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img>  <br/>` +
         `        ${incident.date}` +
         `    </div>` +
         `</div>` +
         `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
 
     return content;
-}
-    // Get the modal
-    var modal = document.getElementById('myModal');
-
-    // Get the image and insert it inside the modal - use its "alt" text as a caption
-    //var img = document.getElementById('${incident.id}');
-   
-    var modalImg = document.getElementById("img01");
-    //$("img").click(function(){
-
-function openModalBox() {
-    $('.modal').css("display", "block");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        console.log("close");
-        $('.modal').css("display", "none");
-    }
 }
 
 function reportNewIncidentOnMarker(latitude, longitude) {
@@ -270,7 +241,16 @@ function reportNewIncidentOnMarker(latitude, longitude) {
             }
         });
     });
+}
 
+function openModalBox(image) {
+    $('#zoomModal').css("display", "block");
+    $('#imgZoomModal').attr("src", image);
+}
+
+function closeModalBox() {
+    $('#zoomModal').css("display", "none");
+    $('#imgZoomModal').attr("src", '');
 }
 
 
