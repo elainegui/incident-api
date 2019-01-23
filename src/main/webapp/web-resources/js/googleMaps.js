@@ -212,21 +212,42 @@ function plotIncidents(incidents) {
     });
 }
 
-//changed style message infowindow
 function createInfoWindowContentForIncident(incident) {
     // ` denotes JavaScript ECMA 6 template string
     var content =
         `<div>` +
         `    <div class= "incidentInfoWindow">` +
         `       ${incident.message}<br/>` +
-        `        <img src="${incident.image}" width="200px"/>  <br/>` +
+        //add id img
+        `        <img id="${incident.id}" class="imgModal" src="${incident.image}" width="50px" onclick=openModalBox()></img>  <br/>` +
         `        ${incident.date}` +
         `    </div>` +
-        `</div>`+
+        `</div>` +
         `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
+
     return content;
 }
+    // Get the modal
+    var modal = document.getElementById('myModal');
 
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    //var img = document.getElementById('${incident.id}');
+   
+    var modalImg = document.getElementById("img01");
+    //$("img").click(function(){
+
+function openModalBox() {
+    $('.modal').css("display", "block");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        console.log("close");
+        $('.modal').css("display", "none");
+    }
+}
 
 function reportNewIncidentOnMarker(latitude, longitude) {
     //TODO close info windows??
@@ -251,3 +272,6 @@ function reportNewIncidentOnMarker(latitude, longitude) {
     });
 
 }
+
+
+
