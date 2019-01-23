@@ -37,6 +37,14 @@ function initMap() {
                 icon: 'icons/user-pink-32.png'
             });
 
+            var infoWindow = new google.maps.InfoWindow({
+                content: `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${pos.lat}, ${pos.lng})">Report New Incident on this Location</button>`
+            });
+
+            markerCurrentPosition.addListener('click', function () {
+                infoWindow.open(map, markerCurrentPosition);
+            });
+
         }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
         });
