@@ -45,6 +45,9 @@ function initMap() {
                 reportNewIncidentOnMarker(event.latLng.lat(), event.latLng.lng());
             });
 
+            //adicionar listener para evento de change no mapa - olhe acima
+            // em vez de report..., coloque loadIncidents e adicione radius no final.
+
 
         }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
