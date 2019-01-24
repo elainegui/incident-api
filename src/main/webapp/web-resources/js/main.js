@@ -238,11 +238,13 @@ function saveIncident(latitude, longitude) {
 
 }
 
-var loadIncidents = function () {
+var loadIncidents = function (latitude, longitude, radius) {
+    //alert(`http://localhost:8080/incident-local?latitude=${latitude}&longitude=${longitude}&radius=${radius}`);
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: "http://localhost:8080/incident",
+        //url: "http://localhost:8080/incident",
+        url: `http://localhost:8080/incident-local?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
         success: function (data, textStatus, jqXHR) {
             plotIncidents(data);
         },

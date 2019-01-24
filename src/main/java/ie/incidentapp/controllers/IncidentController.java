@@ -28,16 +28,25 @@ public class IncidentController {
     }
 
 
-    @RequestMapping(value = "/incident", method = RequestMethod.POST)
+    @RequestMapping(value = "incident", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void createIncident(@RequestBody Incident incident) {
         incidentRepository.save(incident);
     }
 
-    @RequestMapping(value = "/incident", method = RequestMethod.GET)
+    @RequestMapping(value = "incident", method = RequestMethod.GET)
     public Iterable<Incident> listAllIncidents() {
         return incidentRepository.findAll();
     }
+
+
+    @RequestMapping(value = "incident-local", method = RequestMethod.GET)
+    public Iterable<Incident> listIncidentsByRadiusInMeters(@RequestParam("latitude") double latitude,
+                                                            @RequestParam("longitude") double longitude,
+                                                            @RequestParam("radius") long radius) {
+        return incidentRepository.findByRadiusInMeters(latitude, longitude, radius);
+    }
+
 
 
 }

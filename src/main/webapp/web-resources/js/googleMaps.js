@@ -7,18 +7,6 @@ function loadReportIncidentPage() {
 }
 
 function initMap() {
-    var location = {
-        lat: 53.418354,
-        lng: -7.903726
-    };
-    map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 16,
-        center: location
-    });
-
-    google.maps.event.addListener(map, 'click', function (event) {
-        reportNewIncidentOnMarker(event.latLng.lat(), event.latLng.lng());
-    });
 
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
@@ -28,14 +16,22 @@ function initMap() {
                 lng: position.coords.longitude
             };
 
-            map.setCenter(pos);
-            
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 16,
+                center: pos
+            });
+
             //add marker on current position
             var markerCurrentPosition = new google.maps.Marker({
                 position: pos,
                 map: map,
                 icon: 'icons/user-pink-32.png'
             });
+
+            initial_latitude = map.getCenter().lat();
+            initial_longitude = map.getCenter().lng();
+            radius = 200;
+            loadIncidents(initial_latitude, initial_longitude, radius);
 
             var infoWindow = new google.maps.InfoWindow({
                 content: `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${pos.lat}, ${pos.lng})">Report New Incident on this Location</button>`
@@ -45,9 +41,15 @@ function initMap() {
                 infoWindow.open(map, markerCurrentPosition);
             });
 
+            google.maps.event.addListener(map, 'click', function (event) {
+                reportNewIncidentOnMarker(event.latLng.lat(), event.latLng.lng());
+            });
+
+
         }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
         });
+
     } else {
         // Browser doesn't support Geolocation
         handleLocationError(false, infoWindow, map.getCenter());
