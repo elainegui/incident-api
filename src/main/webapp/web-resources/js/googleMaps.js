@@ -223,12 +223,13 @@ function createInfoWindowContentForIncident(incident) {
     var content =
         `<div>` +
         `    <div class= "incidentInfoWindow">` +
-        `       ${incident.message}<br/>` +
-        `        <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img>  <br/>` +
-        `        ${incident.date}` +
+        `       <span>${incident.message}<br/>` +
+        `        ${incident.date}</span>` +
+        `        <span><img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/>  <br/></span?` +
+
         `    </div>` +
         `</div>` +
-        `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
+        `<button type="button" class ="btn btn-primary btn-block btn-sm" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
 
     return content;
 }
