@@ -6,6 +6,14 @@ function loadReportIncidentPage() {
     initAutocomplete();
 }
 
+function loadIncidentsAroundMapCenter() {
+    latitude = map.getCenter().lat();
+    longitude = map.getCenter().lng();
+    radius = 200;
+    loadIncidents(latitude, longitude, radius);
+    console.log("hit backend: " + Date());
+}
+
 function initMap() {
 
     // Try HTML5 geolocation.
@@ -28,11 +36,6 @@ function initMap() {
                 icon: 'icons/user-pink-32.png'
             });
 
-            initial_latitude = map.getCenter().lat();
-            initial_longitude = map.getCenter().lng();
-            radius = 200;
-            loadIncidents(initial_latitude, initial_longitude, radius);
-
             var infoWindow = new google.maps.InfoWindow({
                 content: `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${pos.lat}, ${pos.lng})">Report New Incident on this Location</button>`
             });
@@ -45,11 +48,12 @@ function initMap() {
                 reportNewIncidentOnMarker(event.latLng.lat(), event.latLng.lng());
             });
 
-            //adicionar listener para evento de change no mapa - olhe acima
-            // em vez de report..., coloque loadIncidents e adicione radius no final.
+            map.addListener('idle', function() {
+                loadIncidentsAroundMapCenter();
+            });
 
 
-        }, function () {
+            }, function () {
             handleLocationError(true, infoWindow, map.getCenter());
         });
 
