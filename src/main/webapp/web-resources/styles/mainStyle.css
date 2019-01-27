@@ -46,6 +46,7 @@ body{
     font-family: 'Courier New', Courier, monospace;
     font-size: 12px;
     color: darkblue;
+
 }
 
 /* modal image */
@@ -135,3 +136,19 @@ body{
       width: 100%;
     }
   }
+
+    /* enable accordion on info window */
+    .panel-heading .accordion-toggle:after {
+        /* symbol for "opening" panels */
+        font-family: 'Glyphicons Halflings'; /* essential for enabling glyphicon */
+        content: "\e114"; /* adjust as needed, taken from bootstrap.css */
+        float: right; /* adjust as needed */
+        color: grey; /* adjust as needed */
+
+    }
+
+    .panel-heading .accordion-toggle.collapsed:after {
+        /* symbol for "collapsed" panels */
+        content: "\e080"; /* adjust as needed, taken from bootstrap.css */
+
+    }

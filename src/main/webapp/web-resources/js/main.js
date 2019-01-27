@@ -225,10 +225,11 @@ function saveIncident(latitude, longitude) {
         dataType: 'json',
 
         success: function (data, textStatus, jqXHR) {
-            plotIncident(incidentData);
+            /*plotGroupOfIncidents([incidentData]);
             $("#incidentType").val('');
             $("#photoBase64").val('');
-            $("#message").val('')
+            $("#message").val('')*/
+            window.location.href = 'mainPage.html';
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -252,6 +253,11 @@ var loadIncidents = function (latitude, longitude, radius) {
             alert('incidents load error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
         }
     });
+};
+
+var formatDate = function(someDate) {
+  var tempDate = new Date(someDate);
+  return tempDate.getFullYear() + "-" + tempDate.getMonth()+1 + "-" + tempDate.getDate() + " " + tempDate.getHours() + ":" + tempDate.getMinutes() + ":" + tempDate.getSeconds();
 };
 
 

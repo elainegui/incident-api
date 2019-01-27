@@ -9,9 +9,8 @@ function loadReportIncidentPage() {
 function loadIncidentsAroundMapCenter() {
     latitude = map.getCenter().lat();
     longitude = map.getCenter().lng();
-    radius = 200;
+    radius = 10000;
     loadIncidents(latitude, longitude, radius);
-    console.log("hit backend: " + Date());
 }
 
 function initMap() {
@@ -197,8 +196,7 @@ function defineIconPaths() {
     ];
 }
 
-//changed
-function plotIncident(incident) {
+function plotSingleIncident(incident) {
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(incident.latitude, incident.longitude),
         icon: incidentIcons[incident.type.id],
@@ -210,16 +208,113 @@ function plotIncident(incident) {
     marker.addListener('click', function () {
         infoWindow.open(map, marker);
     });
-    //added
-    google.maps.event.addListener(marker, "dblclick", function (e) { 
-        console.log("marker db click"); 
-     });
+}
+
+function createInfoWindowContentForGroupOfIncidents(groupOfIncidents) {
+    var groupedByTypeIdIncidents = groupIncidentsByType(groupOfIncidents);
+
+    var beginning = '<div class="container" id="base" style="width: 500px; overflow: auto">\n' +
+                    '<div class="panel-group" id="accordion">\n';
+
+    var middle = '';
+    var firstIncident = null;
+    for (var key in groupedByTypeIdIncidents) {
+        var incidentsByType = groupedByTypeIdIncidents[key];
+        firstIncident = incidentsByType[0];
+        middle += `<div class="panel panel-default" id="incident-panel-div-${firstIncident.id}">`;
+        middle += `<div class="panel-heading" id="incident-panel-div-${firstIncident.id}-heading">`;
+        middle += `<h4 class="panel-title">`;
+        middle += `<a class="accordion-toggle" data-parent="#accordion" data-toggle="collapse" href="#incident-panel-div-${firstIncident.id}-content">`;
+        middle += `<img src="${incidentIcons[firstIncident.type.id]}"/>`;
+        middle += `${incidentsByType.length} ${firstIncident.type.description}`;
+        middle += `</a>`;
+        middle += `</h4>`;
+        middle += `</div>`;
+        middle += `<div class="panel-collapse collapse" id="incident-panel-div-${firstIncident.id}-content">`;
+        middle += `<div class="panel-body">`;
+        for (var incident of incidentsByType) {
+            middle += `<div class= "incidentInfoWindow">` +
+        `       <span>`+
+        `           ${incident.message}<br/>` +
+        `           ${formatDate(incident.date)}` +
+        `       </span>`+
+        `       `+
+        `           <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/><br/>`+
+        `       ` +
+        `    </div> `;
+        }
+
+        middle += "</div></div></div>";
+    }
+
+    var ending = '</div>';
+    ending += `<button type="button" class ="btn btn-primary btn-block btn-sm" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${firstIncident.latitude}, ${firstIncident.longitude})">Report New Incident on this Location</button>`;
+    ending += '</div>';
+
+    return beginning + middle + ending;
+}
+
+function plotSameCoordinatesIncidents(groupOfIncidents) {
+    firstIncident = groupOfIncidents[0];
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(firstIncident.latitude, firstIncident.longitude),
+        icon: "mapicons/multiple.png",
+        map: map
+    });
+    var infoWindow = new google.maps.InfoWindow({
+        content: createInfoWindowContentForGroupOfIncidents(groupOfIncidents)
+    });
+    marker.addListener('click', function () {
+        infoWindow.open(map, marker);
+    });
+}
+
+function plotGroupOfIncidents(groupOfIncidents) {
+    if (groupOfIncidents.length === 1) {
+        incident = groupOfIncidents[0];
+        plotSingleIncident(incident);
+    } else {
+        plotSameCoordinatesIncidents(groupOfIncidents);
+    }
+}
+
+function groupIncidentsByType(incidents) {
+    // key = type_id (integer)
+    var dict = {};
+    $.each(incidents, function (index, incident) {
+        var key = incident.type.id;
+        if (!(key in dict)) {
+            dict[key] = new Array();
+        }
+        dict[key].push(incident);
+    });
+    return dict;
+}
+
+function groupIncidentsByLatLng(incidents) {
+    // key = latitude + "|" + longitude
+    var dict = {};
+    $.each(incidents, function (index, incident) {
+        var key = incident.latitude + "|" + incident.longitude;
+        if (!(key in dict)) {
+            dict[key] = new Array();
+        }
+        dict[key].push(incident);
+    });
+    return dict;
 }
 
 function plotIncidents(incidents) {
+    var groupedIncidentsByLatLng = {};
     $.each(incidents, function (index, incident) {
-        plotIncident(incident);
+        groupedIncidentsByLatLng = groupIncidentsByLatLng(incidents);
     });
+
+    for (var key in groupedIncidentsByLatLng) {
+        var arrayOfIncidents = groupedIncidentsByLatLng[key];
+        plotGroupOfIncidents(arrayOfIncidents);
+    }
+
 }
 
 function createInfoWindowContentForIncident(incident) {
@@ -229,7 +324,7 @@ function createInfoWindowContentForIncident(incident) {
         `    <div class= "incidentInfoWindow">` +
         `       <span>`+
         `           ${incident.message}<br/>` +
-        `           ${incident.date}` +
+        `           ${formatDate(incident.date)}` +
         `       </span>`+
         `       `+
         `           <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/><br/>`+
@@ -273,6 +368,3 @@ function closeModalBox() {
     $('#zoomModal').css("display", "none");
     $('#imgZoomModal').attr("src", '');
 }
-
-
-
