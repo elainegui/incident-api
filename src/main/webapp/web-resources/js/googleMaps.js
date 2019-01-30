@@ -39,6 +39,9 @@ function initMap() {
                 content: `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${pos.lat}, ${pos.lng})">Report New Incident on this Location</button>`
             });
 
+        
+
+
             markerCurrentPosition.addListener('click', function () {
                 infoWindow.open(map, markerCurrentPosition);
             });
@@ -264,11 +267,26 @@ function plotSameCoordinatesIncidents(groupOfIncidents) {
     var infoWindow = new google.maps.InfoWindow({
         content: createInfoWindowContentForGroupOfIncidents(groupOfIncidents)
     });
+    console.log("new infowindow");
     marker.addListener('click', function () {
         infoWindow.open(map, marker);
     });
-}
 
+    //added infowindow on mouse over through a multiple marker
+     var infowindowMultipleMarker = new google.maps.InfoWindow({
+            content: getMultipleMarkerContentIncidentCount(groupOfIncidents)
+        });
+
+    marker.addListener('mouseover', function(){
+        infowindowMultipleMarker.open(map, marker);
+    })
+
+    marker.addListener('mouseout', function(){
+        infowindowMultipleMarker.close();
+    })
+
+}
+//group of incidents is an array of incidents (groupedIncidentsByLatLng[key])
 function plotGroupOfIncidents(groupOfIncidents) {
     if (groupOfIncidents.length === 1) {
         incident = groupOfIncidents[0];
@@ -292,7 +310,7 @@ function groupIncidentsByType(incidents) {
 }
 
 function groupIncidentsByLatLng(incidents) {
-    // key = latitude + "|" + longitude
+     key = latitude + "|" + longitude
     var dict = {};
     $.each(incidents, function (index, incident) {
         var key = incident.latitude + "|" + incident.longitude;
@@ -304,9 +322,12 @@ function groupIncidentsByLatLng(incidents) {
     return dict;
 }
 
+//incidents is the data in json format
 function plotIncidents(incidents) {
+    // dictionary (key, value) where key = incident.latitude + "|" + incident.longitude
     var groupedIncidentsByLatLng = {};
     $.each(incidents, function (index, incident) {
+        //the incidents are grouped by lat and lng (function above) using a dictionary
         groupedIncidentsByLatLng = groupIncidentsByLatLng(incidents);
     });
 
@@ -368,3 +389,18 @@ function closeModalBox() {
     $('#zoomModal').css("display", "none");
     $('#imgZoomModal').attr("src", '');
 }
+
+function getMultipleMarkerContentIncidentCount(groupOfIncidents){
+    var groupedByTypeIdIncidents = groupIncidentsByType(groupOfIncidents);
+    var content = ``;
+    var firstIncident = null;
+    for (var key in groupedByTypeIdIncidents) {
+        var incidentsByType = groupedByTypeIdIncidents[key];
+        firstIncident = incidentsByType[0];
+        content+=`<div><a><img src="${incidentIcons[firstIncident.type.id]}"/>`;
+        content+=`${incidentsByType.length} ${firstIncident.type.description}</a></div>`;
+    } 
+    return content
+}
+
+
