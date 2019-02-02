@@ -1,5 +1,11 @@
 var map, infoWindow;
+//added 
+var markerCurrentPosition;
+
 var incidentIcons = defineIconPaths();
+
+//added
+var prev_infowindow =false;
 
 function loadReportIncidentPage() {
     initMap();
@@ -14,14 +20,22 @@ function loadIncidentsAroundMapCenter() {
 }
 
 function initMap() {
-
+   // var currentLatitude = new google.maps.LatLng.position
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-            var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
+
+            //added
+            var user_lat_long = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          //  if(user_lat_long.latitude!=position.coords.latitude&&user_lat_long.longitude!=position.coords.longitude){
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+          //  }else{
+
+          //  }
+            
 
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 16,
@@ -29,7 +43,7 @@ function initMap() {
             });
 
             //add marker on current position
-            var markerCurrentPosition = new google.maps.Marker({
+            markerCurrentPosition = new google.maps.Marker({
                 position: pos,
                 map: map,
                 icon: 'icons/user-pink-32.png'
@@ -43,7 +57,12 @@ function initMap() {
 
 
             markerCurrentPosition.addListener('click', function () {
-                infoWindow.open(map, markerCurrentPosition);
+                if( prev_infowindow ) {
+                    prev_infowindow.close();
+                 }
+         
+                 prev_infowindow = infoWindow;
+                 infoWindow.open(map, markerCurrentPosition);
             });
 
             google.maps.event.addListener(map, 'click', function (event) {
@@ -209,6 +228,11 @@ function plotSingleIncident(incident) {
         content: createInfoWindowContentForIncident(incident)
     });
     marker.addListener('click', function () {
+        if( prev_infowindow ) {
+            prev_infowindow.close();
+         }
+ 
+         prev_infowindow = infoWindow;
         infoWindow.open(map, marker);
     });
 }
@@ -216,7 +240,7 @@ function plotSingleIncident(incident) {
 function createInfoWindowContentForGroupOfIncidents(groupOfIncidents) {
     var groupedByTypeIdIncidents = groupIncidentsByType(groupOfIncidents);
 
-    var beginning = '<div class="container" id="base" style="width: 500px; overflow: auto">\n' +
+    var beginning = '<div id= "incidentInfoWindow" class="container" id="base" style="width: 500px; overflow: auto">\n' +
                     '<div class="panel-group" id="accordion">\n';
 
     var middle = '';
@@ -234,15 +258,19 @@ function createInfoWindowContentForGroupOfIncidents(groupOfIncidents) {
         middle += `</h4>`;
         middle += `</div>`;
         middle += `<div class="panel-collapse collapse" id="incident-panel-div-${firstIncident.id}-content">`;
-        middle += `<div class="panel-body">`;
+        middle += `<div class="panel-body" style="display:block;">`;
         for (var incident of incidentsByType) {
             middle += `<div class= "incidentInfoWindow">` +
         `       <span>`+
-        `           ${incident.message}<br/>` +
-        `           ${formatDate(incident.date)}` +
+
+        `           <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img>`+
+        `       </span>`+
+        `       <span>`+
+        `           ${incident.message}` +
+        `           ${formatDate(incident.date)}</br>` +
         `       </span>`+
         `       `+
-        `           <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/><br/>`+
+       
         `       ` +
         `    </div> `;
         }
@@ -261,7 +289,8 @@ function plotSameCoordinatesIncidents(groupOfIncidents) {
     firstIncident = groupOfIncidents[0];
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(firstIncident.latitude, firstIncident.longitude),
-        icon: "mapicons/multiple.png",
+        //icon: "mapicons/multiple.png",
+        icon: "https://maps.gstatic.com/mapfiles/ms2/micons/purple-dot.png",
         map: map
     });
     var infoWindow = new google.maps.InfoWindow({
@@ -269,6 +298,11 @@ function plotSameCoordinatesIncidents(groupOfIncidents) {
     });
     console.log("new infowindow");
     marker.addListener('click', function () {
+        if( prev_infowindow ) {
+            prev_infowindow.close();
+         }
+ 
+         prev_infowindow = infoWindow;
         infoWindow.open(map, marker);
     });
 
@@ -343,13 +377,14 @@ function createInfoWindowContentForIncident(incident) {
     var content =
         `<div>` +
         `    <div class= "incidentInfoWindow">` +
+        `           <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/><br/>`+
+        `       ` +
         `       <span>`+
         `           ${incident.message}<br/>` +
         `           ${formatDate(incident.date)}` +
         `       </span>`+
         `       `+
-        `           <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/><br/>`+
-        `       ` +
+
         `    </div>` +
         `</div>` +
         `<button type="button" class ="btn btn-primary btn-block btn-sm" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
