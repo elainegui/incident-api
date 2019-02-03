@@ -6,11 +6,170 @@
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <title>Main Page</title>
+    <title>Incident Trends</title>
+    <link href="styles/mainStyle.css" rel="stylesheet" type="text/css">
+    <script crossorigin="anonymous" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
     <script src="js/main.js"></script>
     
-    </head>
+</head>
     <body>
+            <div class="chart-container">
+                    <canvas id="chart"></canvas>
+                </div>
+<script>
 
+var loadIncidentsToTrendsPage = function () {
+    
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: "http://localhost:8080/trend",
+        success: function (trends, textStatus, jqXHR) {
+            console.log(trends);
+            plotTrendsChart(trends);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('incidents load chart error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
+        }
+    });
+};
+
+
+
+var availableColors = ["rgba(0,0,0,255)", "rgba(255,0,0,255)", "rgba(0,0,255,255)", "rgba(0,255,0,255)", "rgba(255,255,0,255)", "rgba(0,255,255,255)"];
+
+function addLabels(targetDictionary, trendsData) {
+    var labels = [];
+    for (var i = 0; i < 12; i++) {
+        labels.push(trendsData[i]['monthYear']);
+    }
+    targetDictionary['labels'] = labels;
+}
+
+function plotTrendsChart(trendsData) {
+
+    var chartData = {};
+    addLabels(chartData, trendsData);
+    console.log(chartData);
+}
+ 
+
+
+
+
+
+
+
+/* 
+var dataRod = {
+  labels: ["Jan","Feb", "Mar", "Apr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dec"],
+  datasets: [{
+    label: "Car Crash",
+    backgroundColor: "rgba(0,0,0,0)",
+    borderColor: "rgba(255,0,0,255)",
+    borderWidth: 2,
+    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+    hoverBorderColor: "rgba(255,99,132,1)",
+    data: [3,4,8,6,5,2,9,11,34,7,4,1],
+    type: 'line'
+  },
+  {
+    label: "Robbery",
+    backgroundColor: "rgba(0,0,0,0)",
+    borderColor: "rgba(0,0,255,1)",
+    borderWidth: 2,
+    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+    hoverBorderColor: "rgba(255,99,132,1)",
+    data: [13,14,18,16,15,12,19,2,1,17,14,11],
+    type: 'line'
+  }
+
+]
+}; */
+
+
+/* function loadChartData(incidents){
+
+    var groupedIncidentsByMonth = {};
+    $.each(incidents, function (index, incident) {
+        //the incidents are grouped by lat and lng (function above) using a dictionary
+        groupedIncidentsByMonth = function(incidents){
+            //var key = incident.date;
+            var dict = {};
+            $.each(incidents, function (index, incident) {
+                // if(incident.date===){
+
+                // }
+            var key = incident.date + "|" + incident.date;
+                if (!(key in dict)) {
+                    dict[key] = new Array();
+                }
+            dict[key].push(incident);
+        });
+    return dict;
+        }
+    });
+
+    for(var i = 0; i < json.length; i++) {
+    var incident = json[i];
+
+    console.log(incident.date);
+    }
+}
+ */
+
+/* $.getJSON("https://localhost:8080/incident", function(data) {
+   var labels = data.customers[0].amounts.map(function(e) {
+      return e[0];
+   });
+   var data = data.customers[0].amounts.map(function(e) {
+      return e[1];
+   }); */
+
+/* 
+var data = {
+  labels: ["Jan","Feb", "Mar", "Apr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dec"],
+  datasets: [{
+    label: "Dataset #1",
+    backgroundColor: "rgba(255,50,100,1)",
+    borderColor: "rgba(255,99,132,1)",
+    borderWidth: 2,
+    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+    hoverBorderColor: "rgba(255,99,132,1)",
+    data: [3,4,8,6,5,2,9,11,34,7,4,1],
+  }]
+};
+
+var options = {
+    //added
+  //responsive: 'true',  
+  
+  maintainAspectRatio: false,
+  scales: {
+    yAxes: [{
+      gridLines: {
+        display: true,
+        color: "rgba(255,99,132,0.2)"
+      }
+    }],
+    xAxes: [{
+      gridLines: {
+        display: false
+      }
+    }]
+  }
+};
+ */
+/*
+Chart.Bar('chart', {
+  options: options,
+  data: dataRod
+});
+*/
+
+loadIncidentsToTrendsPage();
+
+</script>
     </body>
     </html>

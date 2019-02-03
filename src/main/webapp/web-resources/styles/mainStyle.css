@@ -156,3 +156,21 @@ body{
         content: "\e080"; /* adjust as needed, taken from bootstrap.css */
 
     }
+
+    /* chart css */
+    body {  
+      background: rgb(208, 234, 247);
+      padding: 16px;
+    }
+    
+    canvas {
+      border: 1px red;
+    }
+    
+    .chart-container {
+      position: relative;
+      margin: auto;
+      height: 80vh;
+      width: 80vw;
+    }
+    

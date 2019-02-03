@@ -6,8 +6,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class MonthIncidentDataGenerator {
 
-	private static final float COORDINATES_MINIMUM_DELTA = -50;
-	private static final float COORDINATES_MAXIMUM_DELTA = 50;
+	private static final float COORDINATES_MINIMUM_DELTA = -300;
+	private static final float COORDINATES_MAXIMUM_DELTA = 300;
 	private static final int NUMBER_OF_TYPES = 5;
 	private static final int NUMBER_OF_MONTHS = 12;
 	private final static String BASE_QUERY = "INSERT INTO `incident` (date, image, latitude, longitude, message, user_id, verified, type_id) VALUES ('%s', '', %f, %f, '%s', 0 , '\\0' , %d);";
@@ -17,9 +17,9 @@ public class MonthIncidentDataGenerator {
 	private final static double BASE_LATITUDE = 53.418200;
 
 	public static void main(String[] args) {
-		int incidentCount = 1;
+		int incidentCount = 795;
 		for (int month = 1; month <= NUMBER_OF_MONTHS; month++) {
-			int numberIterations = ThreadLocalRandom.current().nextInt(30, 100 + 1);
+			int numberIterations = ThreadLocalRandom.current().nextInt(100, 200 + 1);
 			String date = format(BASE_DATE, month);
 			for (int iteration = 0; iteration < numberIterations; iteration++) {
 				double latitude = BASE_LATITUDE + ThreadLocalRandom.current().nextDouble(COORDINATES_MINIMUM_DELTA,
