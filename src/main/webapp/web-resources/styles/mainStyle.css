@@ -49,6 +49,7 @@ body{
     /* added */
     display: block;
     /* overflow: auto; */
+  
 }
 
 /* modal image */
@@ -157,12 +158,50 @@ body{
 
     }
 
-    /* chart css */
-    body {  
-      background: rgb(208, 234, 247);
-      padding: 16px;
+    /*content infowindow*/
+    #contentInfowindow {
+      display:flex;
+      overflow: auto;
+      width:200px;
     }
-    
+
+ /*    #left:after{
+      content:".";
+      display:"block";
+      height:0;
+      clear:"both";
+      visibility:hidden;
+    } */
+
+    #left{
+      float:left;
+      width:25%;
+      margin:1px;
+      /* padding:0.2em; */
+      background: rgb(243, 220, 236);
+    }
+
+    #right{
+      float:right;
+      min-height: 55px;
+      width:70%;
+      margin:1px;
+      /* padding:0.2em; */
+      background: rgb(235, 180, 189);
+    }
+
+    #object3{
+      background-color: lightblue;
+      overflow:auto;
+    }
+
+/*     @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
+    .panel-modest .panel-body {
+      display: inline-block;
+    } */
+
+    /* chart css */
+   
     canvas {
       border: 1px red;
     }

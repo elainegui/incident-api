@@ -42,15 +42,23 @@ var availableColors = ["rgba(0,0,0,255)", "rgba(255,0,0,255)", "rgba(0,0,255,255
 function addLabels(targetDictionary, trendsData) {
     var labels = [];
     for (var i = 0; i < 12; i++) {
+        //key month year
         labels.push(trendsData[i]['monthYear']);
     }
     targetDictionary['labels'] = labels;
+}
+
+function addIncidents(chartData, trendsData) {
+    datasets = [];
+    
+
 }
 
 function plotTrendsChart(trendsData) {
 
     var chartData = {};
     addLabels(chartData, trendsData);
+    addIncidents(chartData, trendsData);
     console.log(chartData);
 }
  

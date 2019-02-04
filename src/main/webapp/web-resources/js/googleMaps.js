@@ -240,14 +240,16 @@ function plotSingleIncident(incident) {
 function createInfoWindowContentForGroupOfIncidents(groupOfIncidents) {
     var groupedByTypeIdIncidents = groupIncidentsByType(groupOfIncidents);
 
-    var beginning = '<div id= "incidentInfoWindow" class="container" id="base" style="width: 500px; overflow: auto">\n' +
+    var beginning = '<div class="w-25 p-3" style="background-color: #eee;" id= "incidentInfoWindow" class="container" id="base" style="width: 500px; overflow: auto">\n' +
                     '<div class="panel-group" id="accordion">\n';
-
+                 
     var middle = '';
     var firstIncident = null;
     for (var key in groupedByTypeIdIncidents) {
         var incidentsByType = groupedByTypeIdIncidents[key];
         firstIncident = incidentsByType[0];
+        // middle += `<a href="" class="col-md-2">`;
+        
         middle += `<div class="panel panel-default" id="incident-panel-div-${firstIncident.id}">`;
         middle += `<div class="panel-heading" id="incident-panel-div-${firstIncident.id}-heading">`;
         middle += `<h4 class="panel-title">`;
@@ -261,18 +263,24 @@ function createInfoWindowContentForGroupOfIncidents(groupOfIncidents) {
         middle += `<div class="panel-body" style="display:block;">`;
         for (var incident of incidentsByType) {
             middle += `<div class= "incidentInfoWindow">` +
-        `       <span>`+
-
-        `           <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img>`+
-        `       </span>`+
-        `       <span>`+
+        `    <div id ="left" >` +
+        `       <div>`+
+        `           <img id="imgInfowindow" class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img>`+
+        `       </div>`+
+        `    </div>`+
+        `    <div id="right">`+
+        `        <div id="object3">`+
         `           ${incident.message}` +
+        `        </div>`+
+        `        <br/>`+
+        `        <div>`+
         `           ${formatDate(incident.date)}</br>` +
-        `       </span>`+
-        `       `+
-       
-        `       ` +
-        `    </div> `;
+        `       </div>`+
+        `    </div> `+
+        `<br style="clear:both;"/>`+
+        //`</div>`+
+        //  `</a>`;
+        `</div>`;
         }
 
         middle += "</div></div></div>";
@@ -375,18 +383,24 @@ function plotIncidents(incidents) {
 function createInfoWindowContentForIncident(incident) {
     // ` denotes JavaScript ECMA 6 template string
     var content =
-        `<div>` +
-        `    <div class= "incidentInfoWindow">` +
-        `           <img class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/><br/>`+
-        `       ` +
-        `       <span>`+
-        `           ${incident.message}<br/>` +
-        `           ${formatDate(incident.date)}` +
-        `       </span>`+
-        `       `+
-
+        `<div id="contentInfowindow" class= "incidentInfoWindow">` +
+        `    <div id ="left" >` +
+        `       <div>`+
+        `           <img id = "imgInfowindow" class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/><br/>`+
+        `       </div>`+
+        `    </div>       ` +
+        `    <div id="right">`+
+        `        <div id="object3">`+
+        `            ${incident.message}` +
+        `        </div>`+
+        `        <br/>`+
+        `        <div>`+
+        `            ${formatDate(incident.date)}` +
+        `        </div>`+
         `    </div>` +
         `</div>` +
+
+
         `<button type="button" class ="btn btn-primary btn-block btn-sm" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
 
     return content;
@@ -401,6 +415,7 @@ function reportNewIncidentOnMarker(latitude, longitude) {
             show: 'blind',
             hide: 'blind',
             width: 400,
+            height:430,
             dialogClass: 'ui-dialog-osx',
             buttons: {
                 "Report": function() {
