@@ -13,6 +13,13 @@ public class IncidentType {
         return id;
     }
 
+    public IncidentType() {    }
+
+    public IncidentType(int id, String description) {
+        this.id = id;
+        this.description = description;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

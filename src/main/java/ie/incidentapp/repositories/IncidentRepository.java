@@ -23,7 +23,10 @@ public interface IncidentRepository extends CrudRepository<Incident, String> {
     List<Incident> findByRadiusInMeters(@Param("latitude") double latitude, @Param("longitude") double longitude,
                                         @Param("distance_in_meters") long distanceInMeters);
 
-    @Query(value = "SELECT * FROM incident WHERE date BETWEEN (NOW() - INTERVAL 12 MONTH) AND NOW()", nativeQuery = true)
+    @Query(value = "SELECT incident.*, incident_type.description FROM " +
+            "incident inner join incident_type on type_id = incident_type.id " +
+            "WHERE date BETWEEN (NOW() - INTERVAL 12 MONTH) AND NOW() " +
+            "order by date, type_id", nativeQuery = true)
     List<Incident> findAllFromLast12Months();
 
 }

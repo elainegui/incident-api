@@ -5,20 +5,20 @@ import java.util.Map;
 
 public class Trend {
 
-    private IncidentType incidentType;
+    private String incidentTypeDescription;
     private Map<String, Long> totalPerMonth;
 
-    public Trend(IncidentType incidentType) {
-        this.incidentType = incidentType;
+    public Trend(String incidentTypeDescription) {
+        this.incidentTypeDescription = incidentTypeDescription;
         totalPerMonth = new HashMap<>();
     }
 
-    public IncidentType getIncidentType() {
-        return incidentType;
+    public String getIncidentTypeDescription() {
+        return incidentTypeDescription;
     }
 
-    public void setIncidentType(IncidentType incidentType) {
-        this.incidentType = incidentType;
+    public void setIncidentTypeDescription(String incidentTypeDescription) {
+        this.incidentTypeDescription = incidentTypeDescription;
     }
 
     public Map<String, Long> getTotalPerMonth() {

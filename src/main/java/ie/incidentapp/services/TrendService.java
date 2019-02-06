@@ -2,6 +2,7 @@ package ie.incidentapp.services;
 
 import ie.incidentapp.entities.Incident;
 import ie.incidentapp.entities.IncidentType;
+import ie.incidentapp.entities.IncidentTypeEnum;
 import ie.incidentapp.entities.Trend;
 import ie.incidentapp.repositories.IncidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class TrendService {
@@ -25,18 +23,21 @@ public class TrendService {
     public List<Trend> findAllFromLast12Months() {
         List<Incident> allIncidentsFromLast12Months = incidentRepository.findAllFromLast12Months();
 
-        Map<IncidentType, Map<String, Long>> incidentCounterByTypeAndDate = new HashMap<>();
+        // organize the incidents per type description and per date (month), so their respective totals can be find in the next step
+        Map<String, Map<String, Long>> incidentCounterByTypeAndDate = initializeMap();
+
+        //for every incident found, increment the respective counter
         for (Incident incident: allIncidentsFromLast12Months) {
             String monthYear = dateFormatter.format(incident.getDate());
-            initializeMapIfNeeded(incidentCounterByTypeAndDate, monthYear, incident);
-            long currentCountForTypeAndDate = incidentCounterByTypeAndDate.get(incident.getType()).get(monthYear);
-            incidentCounterByTypeAndDate.get(incident.getType()).put(monthYear, currentCountForTypeAndDate + 1);
+            long currentCountForTypeAndDate = incidentCounterByTypeAndDate.get(incident.getType().getDescription()).get(monthYear);
+            incidentCounterByTypeAndDate.get(incident.getType().getDescription()).put(monthYear, currentCountForTypeAndDate + 1);
         }
 
+        // aggregate the information as Trends, to be sent as response
         List<Trend> trends = new ArrayList<>();
-        for (Map.Entry<IncidentType, Map<String, Long>> incidentTypeEntry : incidentCounterByTypeAndDate.entrySet()) {
-            Trend trend = new Trend(incidentTypeEntry.getKey());
-            Map<String, Long> countersPerDate = incidentTypeEntry.getValue();
+        for (Map.Entry<String, Map<String, Long>> incidentTypeDescriptionEntry : incidentCounterByTypeAndDate.entrySet()) {
+            Trend trend = new Trend(incidentTypeDescriptionEntry.getKey());
+            Map<String, Long> countersPerDate = incidentTypeDescriptionEntry.getValue();
             for (Map.Entry<String, Long> countersPerDateEntry : countersPerDate.entrySet()) {
                 String monthYear = countersPerDateEntry.getKey();
                 Long totalOfIncidents = countersPerDateEntry.getValue();
@@ -47,12 +48,33 @@ public class TrendService {
         return trends;
     }
 
-    private void initializeMapIfNeeded(Map<IncidentType, Map<String, Long>> incidentCounterByTypeAndDate, String monthYear, Incident incident) {
-        if (!incidentCounterByTypeAndDate.containsKey(incident.getType())) {
-            incidentCounterByTypeAndDate.put(incident.getType(), new HashMap<>());
+    private Map<String, Map<String, Long>> initializeMap() {
+        Map<String, Map<String, Long>> incidentCounterByTypeAndDate = new HashMap<>();
+        List<String> past12Months = buildListOfPast12Months();
+        long initialIncidentCount = 0;
+        for (IncidentTypeEnum incidentTypeEnum: IncidentTypeEnum.values()) {
+            //for each incident type, creates an empty map to store the months and initial incident count
+            incidentCounterByTypeAndDate.put(incidentTypeEnum.getIncidentType().getDescription(), new HashMap<>());
+            for (String month: past12Months) {
+                //for each month, add the initial incident count
+                incidentCounterByTypeAndDate.get(incidentTypeEnum.getIncidentType().getDescription()).put(month, initialIncidentCount);
+            }
         }
-        if (!incidentCounterByTypeAndDate.get(incident.getType()).containsKey(monthYear)) {
-            incidentCounterByTypeAndDate.get(incident.getType()).put(monthYear, 0L);
-        }
+        return incidentCounterByTypeAndDate;
     }
+
+
+    private List<String> buildListOfPast12Months() {
+        List<String> past12Months = new ArrayList<>();
+        SimpleDateFormat monthDate = new SimpleDateFormat("MM-yyyy");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -11);
+        for (int monthIndex = 1; monthIndex <= 12; monthIndex++) {
+            String monthName = monthDate.format(cal.getTime());
+            past12Months.add(monthName);
+            cal.add(Calendar.MONTH, +1);
+        }
+        return past12Months;
+    }
+
 }
