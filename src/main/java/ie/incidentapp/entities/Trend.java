@@ -1,63 +1,31 @@
 package ie.incidentapp.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import java.util.HashMap;
+import java.util.Map;
 
-@Entity(name = "incident_trend_past_12_months")
 public class Trend {
 
-	@Id
-	private String id;
-	@Column(name = "month_and_year")
-	private String monthYear;
-	@Column(name = "month_short_name")
-	private String monthShortName;
-	@Column(name = "type_id")
-	private int typeId;
-	@Column(name = "description")
-	private String typeDescription;
-	@Column(name = "total_of_incidents_per_type")
-	private long totalOfIncidents;
+    private IncidentType incidentType;
+    private Map<String, Long> totalPerMonth;
 
-	public String getMonthYear() {
-		return monthYear;
-	}
+    public Trend(IncidentType incidentType) {
+        this.incidentType = incidentType;
+        totalPerMonth = new HashMap<>();
+    }
 
-	public void setMonthYear(String monthYear) {
-		this.monthYear = monthYear;
-	}
+    public IncidentType getIncidentType() {
+        return incidentType;
+    }
 
-	public String getMonthShortName() {
-		return monthShortName;
-	}
+    public void setIncidentType(IncidentType incidentType) {
+        this.incidentType = incidentType;
+    }
 
-	public void setMonthShortName(String monthShortName) {
-		this.monthShortName = monthShortName;
-	}
+    public Map<String, Long> getTotalPerMonth() {
+        return totalPerMonth;
+    }
 
-	public int getTypeId() {
-		return typeId;
-	}
-
-	public void setTypeId(int typeId) {
-		this.typeId = typeId;
-	}
-
-	public String getTypeDescription() {
-		return typeDescription;
-	}
-
-	public void setTypeDescription(String typeDescription) {
-		this.typeDescription = typeDescription;
-	}
-
-	public long getTotalOfIncidents() {
-		return totalOfIncidents;
-	}
-
-	public void setTotalOfIncidents(long totalOfIncidents) {
-		this.totalOfIncidents = totalOfIncidents;
-	}
-
+    public void setTotalPerMonth(Map<String, Long> totalPerMonth) {
+        this.totalPerMonth = totalPerMonth;
+    }
 }
