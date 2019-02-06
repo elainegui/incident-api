@@ -1,6 +1,6 @@
 package ie.incidentapp.entities;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Trend {
@@ -10,7 +10,7 @@ public class Trend {
 
     public Trend(String incidentTypeDescription) {
         this.incidentTypeDescription = incidentTypeDescription;
-        totalPerMonth = new HashMap<>();
+        totalPerMonth = new LinkedHashMap<>();
     }
 
     public String getIncidentTypeDescription() {

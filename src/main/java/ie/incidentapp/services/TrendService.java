@@ -1,7 +1,6 @@
 package ie.incidentapp.services;
 
 import ie.incidentapp.entities.Incident;
-import ie.incidentapp.entities.IncidentType;
 import ie.incidentapp.entities.IncidentTypeEnum;
 import ie.incidentapp.entities.Trend;
 import ie.incidentapp.repositories.IncidentRepository;
@@ -49,12 +48,12 @@ public class TrendService {
     }
 
     private Map<String, Map<String, Long>> initializeMap() {
-        Map<String, Map<String, Long>> incidentCounterByTypeAndDate = new HashMap<>();
+        Map<String, Map<String, Long>> incidentCounterByTypeAndDate = new LinkedHashMap<>();
         List<String> past12Months = buildListOfPast12Months();
         long initialIncidentCount = 0;
         for (IncidentTypeEnum incidentTypeEnum: IncidentTypeEnum.values()) {
             //for each incident type, creates an empty map to store the months and initial incident count
-            incidentCounterByTypeAndDate.put(incidentTypeEnum.getIncidentType().getDescription(), new HashMap<>());
+            incidentCounterByTypeAndDate.put(incidentTypeEnum.getIncidentType().getDescription(), new LinkedHashMap<>());
             for (String month: past12Months) {
                 //for each month, add the initial incident count
                 incidentCounterByTypeAndDate.get(incidentTypeEnum.getIncidentType().getDescription()).put(month, initialIncidentCount);
