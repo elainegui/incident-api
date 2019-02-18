@@ -2,10 +2,16 @@ var map, infoWindow;
 //added 
 var markerCurrentPosition;
 
+//added
+var groupOfIncidents=null;
+
+//added
+//var infowindowMultipleMarker2nd = null;
+
 var incidentIcons = defineIconPaths();
 
 //added
-var prev_infowindow =false;
+var prevInfowindow =false;
 
 function loadReportIncidentPage() {
     initMap();
@@ -15,7 +21,7 @@ function loadReportIncidentPage() {
 function loadIncidentsAroundMapCenter() {
     latitude = map.getCenter().lat();
     longitude = map.getCenter().lng();
-    radius = 10000;
+    radius = 10000; //in meters
     loadIncidents(latitude, longitude, radius);
 }
 
@@ -25,17 +31,12 @@ function initMap() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
 
-            //added
+        
             var user_lat_long = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          //  if(user_lat_long.latitude!=position.coords.latitude&&user_lat_long.longitude!=position.coords.longitude){
                 var pos = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-          //  }else{
-
-          //  }
-            
 
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 16,
@@ -50,18 +51,18 @@ function initMap() {
             });
 
             var infoWindow = new google.maps.InfoWindow({
-                content: `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${pos.lat}, ${pos.lng})">Report New Incident on this Location</button>`
+               // content: `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${pos.lat}, ${pos.lng})">Report New Incident on this Location</button>`
+               content: `<button type="button" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${pos.lat}, ${pos.lng})">Report New Incident</button>`
+                        //`<button type= "button" onclick="reportNewIncidentOnMarker(lat,lng)" `
             });
 
-        
-
-
+            //create infowindow to current position
             markerCurrentPosition.addListener('click', function () {
-                if( prev_infowindow ) {
-                    prev_infowindow.close();
+                if( prevInfowindow ) {
+                    prevInfowindow.close();
                  }
          
-                 prev_infowindow = infoWindow;
+                 prevInfowindow = infoWindow;
                  infoWindow.open(map, markerCurrentPosition);
             });
 
@@ -206,16 +207,86 @@ function syncMapWithAddress() {
     }
 }
 
-function defineIconPaths() {
-    var iconBasePath = 'mapicons/';
-    return [
-        iconBasePath + 'burning-car.png',
-        iconBasePath + 'semaphore.png',
-        iconBasePath + 'street-light.png',
-        iconBasePath + 'theft.png',
-        iconBasePath + 'robbery.png',
-        iconBasePath + 'road-work.png'
-    ];
+function reportNewIncidentOnMarker(latitude, longitude) {
+    if(prevInfowindow){
+    prevInfowindow.close();
+}
+// $("div#newIncidentForm").dialog ().prev ().find (".ui-dialog-titlebar-close").css("background-color", "yellow");
+// $("div#newIncidentForm").dialog ().prev ().find (".ui-dialog-titlebar-close").addClass("ui-icon-closethick")
+$(function () {
+         $("#newIncidentForm").dialog({
+             modal: true,
+             resizable: true,
+             show: 'blind',
+             hide: 'blind',
+             width: 370,
+             height:430,
+             dialogClass: 'ui-dialog-osx',
+             buttons: {
+                 "Report": function() {
+                     saveIncident(latitude, longitude);
+                     $(this).dialog("close");
+                 },
+                 "Close": function() {
+                     $(this).dialog('close');
+                 }
+             }
+         });
+     });
+ }
+ 
+ function openModalBox(image) {
+     $('#zoomModal').css("display", "block");
+     $('#imgZoomModal').attr("src", image);
+ }
+ 
+ function closeModalBox() {
+     $('#zoomModal').css("display", "none");
+     $('#imgZoomModal').attr("src", '');
+ }
+
+//incidents is the data in json format
+function plotIncidents(incidents) {
+    // dictionary (key, value) where key = incident.latitude + "|" + incident.longitude
+    var groupedIncidentsByLatLng = {};
+    $.each(incidents, function (index, incident) {
+        //the incidents are grouped by lat and lng (function above) using a dictionary
+        groupedIncidentsByLatLng = groupIncidentsByLatLng(incidents);
+    });
+
+    //groupedIncidentsByLatLng is a dictionary where key is latitude|longitude and value is incident
+    for (var key in groupedIncidentsByLatLng) {
+        var arrayOfIncidents = groupedIncidentsByLatLng[key];
+        //groupOfIncidents = groupedIncidentsByLatLng[key];
+        plotGroupOfIncidents(arrayOfIncidents);
+    }
+
+}
+
+//dict where key is latitude|longitude and value is incident
+function groupIncidentsByLatLng(incidents) {
+    key = latitude + "|" + longitude
+   var dict = {};
+   $.each(incidents, function (index, incident) {
+       var key = incident.latitude + "|" + incident.longitude;
+       if (!(key in dict)) {
+           dict[key] = new Array();
+       }
+       dict[key].push(incident);
+   });
+   return dict;
+}
+
+//group of incidents is an array of incidents (groupedIncidentsByLatLng[key])
+//for each key (=lat|lng) where value is an incident
+function plotGroupOfIncidents(groupOfIncidents) {
+    //console.log("groupOfIncidents"+groupOfIncidents)
+    if (groupOfIncidents.length === 1) {
+        incident = groupOfIncidents[0];
+        plotSingleIncident(incident);
+    } else {
+        plotSameCoordinatesIncidents(groupOfIncidents);
+    }
 }
 
 function plotSingleIncident(incident) {
@@ -228,16 +299,157 @@ function plotSingleIncident(incident) {
         content: createInfoWindowContentForIncident(incident)
     });
     marker.addListener('click', function () {
-        if( prev_infowindow ) {
-            prev_infowindow.close();
+        if( prevInfowindow ) {
+            prevInfowindow.close();
          }
  
-         prev_infowindow = infoWindow;
+         prevInfowindow = infoWindow;
         infoWindow.open(map, marker);
     });
 }
 
+//added
+    //added
+    var groupOfInc2=null;
+
+//groupOfIncidents is a dictionary where key is lat/lng and value is an incident
+function plotSameCoordinatesIncidents(groupOfIncidents) {
+    //console.log("groupOfIncidents"+groupOfIncidents);
+    firstIncident = groupOfIncidents[0];
+
+    //for each group of incidents is created a marker
+    var markerMultiple = new google.maps.Marker({
+        position: new google.maps.LatLng(firstIncident.latitude, firstIncident.longitude),
+        //icon: "mapicons/multiple.png",
+        icon: "icons/icons8-marker-30.png",
+        map: map
+    });
+
+
+    /*  commented to change infowindow layout
+    var infoWindow = new google.maps.InfoWindow({
+        content: createInfoWindowContentForGroupOfIncidents(groupOfIncidents)
+    });
+    console.log("new infowindow");
+ */
+    //added second infowindow
+/*     var infowindowMultipleMarker2nd = new google.maps.InfoWindow({
+        content: createInfoWindowContentForGroupOfIncidents(groupOfIncidents)
+    }); */
+
+    // for each group of incident there is a infowindow
+    var infowindowMultipleMarker = new google.maps.InfoWindow({
+        content: getMultipleMarkerContentIncidentCount(groupOfIncidents)
+    });
+
+   /*  marker.addListener('mouseover', function () {
+        infowindowMultipleMarker.open(map, marker);
+    }) */
+
+   /*  marker.addListener('mouseout', function () {
+        infowindowMultipleMarker.close();
+    }) */
+
+    // for each multiple marker there is a listener
+    markerMultiple.addListener('click', function () {
+        if( prevInfowindow ) {
+            prevInfowindow.close();
+         }
+         prevInfowindow = infowindowMultipleMarker;
+        infowindowMultipleMarker.open(map, markerMultiple);
+
+        groupOfInc2 = groupOfIncidents;
+         markerCurr=markerMultiple;
+        
+    });
+    
+}
+//added
+markerCurr=null;
+
+function createInfoWindowContentForIncident(incident) {
+    // ` denotes JavaScript ECMA 6 template string
+    var content =
+        `<div id="contentInfowindow" class= "incidentInfoWindow">` +
+        `    <div id ="left" >` +
+        `       <div>`+
+        `           <img id = "imgInfowindow" class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/><br/>`+
+        `       </div>`+
+        `    </div>       ` +
+        `    <div id="right">`+
+        `        <div id="object3">`+
+        `            ${incident.message}` +
+        `        </div>`+
+        `        <br/>`+
+        `        <div>`+
+        `            ${formatDate(incident.date)}` +
+        `        </div>`+
+        `    </div>` +
+        `</div>` +
+
+
+        `<button type="button" class ="btn btn-primary btn-block btn-sm" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
+
+    return content;
+}
+
+function defineIconPaths() {
+    var iconBasePath = 'mapicons/';
+    return [
+        iconBasePath + 'burning-car.png',
+        iconBasePath + 'semaphore.png',
+        iconBasePath + 'street-light.png',
+        iconBasePath + 'theft.png',
+        iconBasePath + 'robbery.png',
+        iconBasePath + 'road-work.png'
+    ];
+}
+
+function groupIncidentsByType(incidents) {
+    // key = type.id
+    var dict = {};
+    $.each(incidents, function (index, incident) {
+        var key = incident.type.id;
+        if (!(key in dict)) {
+            dict[key] = new Array();
+        }
+        dict[key].push(incident);
+    });
+    return dict;
+}
+//
+//groupOfIncidents = null;
+
+function getMultipleMarkerContentIncidentCount(groupOfIncidents){
+    //console.log("groupOfIncidents : "+groupOfIncidents);
+    //console.log(groupOfIncidentsToPass[]);
+
+    //groupIncidentsByType returns a dict where key is the incident.type.id and the value is an incident
+    var groupedByTypeIdIncidents = groupIncidentsByType(groupOfIncidents);
+    //console.log("groupedByTypeIdIncidents: "+groupedByTypeIdIncidents);
+    
+    var content = ``;
+    var firstIncident = null;
+
+    for (var key in groupedByTypeIdIncidents) {
+        //incidentsByType are the incidents with the same type.id
+        var incidentsByType = groupedByTypeIdIncidents[key];
+        
+        firstIncident = incidentsByType[0];
+        content+=`<div><a><img src="${incidentIcons[firstIncident.type.id]}"/>`;
+        content+=`${incidentsByType.length} ${firstIncident.type.description}</a></div>`;
+    } 
+    firstIncident = incidentsByType[0];     //onclick="openSecondInfowindowMultipleMarker(${groupOfIncidents})
+    var buttons = `<div class="wrapper"><br/><button type="button" class="btn btn-primary btn-sm" style="padding: 6px 15px" id="btnMore" onclick="openSecondInfowindowMultipleMarker(${firstIncident.latitude}, ${firstIncident.longitude})">More</button>`;
+    buttons += `&nbsp&nbsp&nbsp<button type="button" class = "btn btn-primary btn-sm" style="padding: 6px 15px" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${firstIncident.latitude}, ${firstIncident.longitude})">Report</button></div>`;
+    var htmlReturned = content+buttons;
+    
+    return htmlReturned
+}
+
 function createInfoWindowContentForGroupOfIncidents(groupOfIncidents) {
+   // console.log(infowindowMultipleMarker2nd);
+    // groupIncidentsByType return a dictionary key:value where key is the type.id and value is incident
     var groupedByTypeIdIncidents = groupIncidentsByType(groupOfIncidents);
 
     var beginning = '<div class="w-25 p-3" style="background-color: #eee;" id= "incidentInfoWindow" class="container" id="base" style="width: 500px; overflow: auto">\n' +
@@ -293,164 +505,169 @@ function createInfoWindowContentForGroupOfIncidents(groupOfIncidents) {
     return beginning + middle + ending;
 }
 
-function plotSameCoordinatesIncidents(groupOfIncidents) {
-    firstIncident = groupOfIncidents[0];
-    var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(firstIncident.latitude, firstIncident.longitude),
-        //icon: "mapicons/multiple.png",
-        icon: "https://maps.gstatic.com/mapfiles/ms2/micons/purple-dot.png",
-        map: map
-    });
-    var infoWindow = new google.maps.InfoWindow({
-        content: createInfoWindowContentForGroupOfIncidents(groupOfIncidents)
-    });
-    console.log("new infowindow");
-    marker.addListener('click', function () {
-        if( prev_infowindow ) {
-            prev_infowindow.close();
-         }
+//function openSecondInfowindowMultipleMarker(){
+function openSecondInfowindowMultipleMarker(lat,lng){
+
+
+
+
+    var positionCurrMarker = new google.maps.LatLng(lat,lng);
+    console.log("positionCurrMarker "+positionCurrMarker);
+     console.log("lat "+lat);
+  prevInfowindow.close();
+
+
+
+
+ var infowindowIncidentsDetails = new google.maps.InfoWindow({
+     content:createInfoWindowContentForGroupOfIncidents(groupOfInc2)
+     //content:"hiiii"
+     
+  });
+
+  if( prevInfowindow ) {
+    prevInfowindow.close();
+ }
+
+
+ infowindowIncidentsDetails.open(map,markerCurr);
+ prevInfowindow = infowindowIncidentsDetails;
  
-         prev_infowindow = infoWindow;
-        infoWindow.open(map, marker);
-    });
+ 
+ 
+ 
+}
+ 
+ /*   //  var prevInfowindow2=false;
 
-    //added infowindow on mouse over through a multiple marker
-     var infowindowMultipleMarker = new google.maps.InfoWindow({
-            content: getMultipleMarkerContentIncidentCount(groupOfIncidents)
+        //on content changed
+        google.maps.event.addListener(prevInfowindow, "content_changed", function () {
+            //prevInfowindow2= prevInfowindow;
+            console.log("prev infowindow");
+           //   if(prevInfowindow2.close()){
+            //prevInfowindow2.setContent(previousContent);
+           // }  
         });
 
-    marker.addListener('mouseover', function(){
-        infowindowMultipleMarker.open(map, marker);
-    })
+    var newInfowindowContent =createInfoWindowContentForGroupOfIncidents(groupOfInc2);
+    prevInfowindow.setContent(newInfowindowContent);
+    
+    //prevInfowindow2= prevInfowindow;
 
-    marker.addListener('mouseout', function(){
-        infowindowMultipleMarker.close();
-    })
 
-}
-//group of incidents is an array of incidents (groupedIncidentsByLatLng[key])
-function plotGroupOfIncidents(groupOfIncidents) {
-    if (groupOfIncidents.length === 1) {
-        incident = groupOfIncidents[0];
-        plotSingleIncident(incident);
-    } else {
-        plotSameCoordinatesIncidents(groupOfIncidents);
-    }
-}
+    var previousContent = getMultipleMarkerContentIncidentCount(groupOfInc2);
+        
+    
 
-function groupIncidentsByType(incidents) {
-    // key = type_id (integer)
-    var dict = {};
-    $.each(incidents, function (index, incident) {
-        var key = incident.type.id;
-        if (!(key in dict)) {
-            dict[key] = new Array();
-        }
-        dict[key].push(incident);
+    // google.maps.event.addListener(prevInfowindow2, "closeclick", function () {
+        google.maps.event.addListener(prevInfowindow, "closeclick", function () {
+               // console.log("prev infowindow");
+        prevInfowindow.setContent(previousContent);
+      //  prevInfowindow = prevInfowindow2;
+     });
+
+
+
+
+
+
+
+
+
+
+   // prevInfowindow2
+
+   /*  var previousContent = getMultipleMarkerContentIncidentCount(groupOfInc2);
+     google.maps.event.addListener(prevInfowindow, "closeclick", function () {
+                console.log("prev infowindow");
+
+        prevInfowindow.setContent(previousContent);
+     });
+ */
+    //   if(prevInfowindow2.close()){
+    //     console.log("prev window closed");
+    //  } 
+
+ 
+
+   // prevInfowindow.close();
+//infowindowMultipleMarker2nd.open(map, markerMultiple);
+
+
+ //   console.log(infowindowMultipleMarker2nd.get);
+    //prevInfowindow.setContent(createInfoWindowContentForGroupOfIncidents(groupOfIncidents));
+//prevInfowindow.setContent("new Content");
+
+
+// if(prevInfowindow.close()){
+//     console.log("hi 2");
+// }
+             // prevInfowindow.close();
+
+            //   google.maps.event.addListener(prevInfowindow, "close", function () {
+            //     console.log("prev infowindow");
+                
+            //    });
+
+   // console.log("groupOfIncidents"+groupOfIncidents);
+
+//close curr infowindow
+//prevInfowindow.close();
+//prevInfowindow.setContent();
+
+// message infowindowMultipleMarker is undefined
+//infowindowMultipleMarker.close();
+
+
+//open other infowindow
+
+
+
+
+    //
+   
+   
+ 
+    // prevInfowindow.setContent(createInfoWindowContentForGroupOfIncidents(groupOfIncidentsToPass));
+    
+
+    
+//    google.maps.event.addListener(prevInfowindow, "closeclick", function () {
+//        console.log("prev infowindow");
+//       
+//      });
+
+      //prevInfowindow.close();
+
+ 
+  
+  
+  
+  
+  
+    //console.log("infoWindow : ");
+/*     google.maps.event.addListener(infoWindow, "closeclick", function () {
+        
+        //infoWindowVisible(false);
+      }); */
+ //   console.log("test1");
+//    if(prevInfowindow) {
+//        console.log("here prev infowindow");
+      // prevInfowindow.close();
+        //prevInfowindow.setContent("Hi");
+        //prevInfowindow.open(map);
+       //prevInfowindow.close();
+       //prevInfowindow.open(map);
+
+    // }
+//var newContent = this.infowindowMultipleMarker.setContent('<p>Hello<p>');
+   /*  google.maps.event.addListener(map, 'click', function () {
+        reportNewIncidentOnMarker(lat, lng);
     });
-    return dict;
-}
 
-function groupIncidentsByLatLng(incidents) {
-     key = latitude + "|" + longitude
-    var dict = {};
-    $.each(incidents, function (index, incident) {
-        var key = incident.latitude + "|" + incident.longitude;
-        if (!(key in dict)) {
-            dict[key] = new Array();
-        }
-        dict[key].push(incident);
-    });
-    return dict;
-}
+  */
+    //infowindowMultipleMarker2nd.open(); */
 
-//incidents is the data in json format
-function plotIncidents(incidents) {
-    // dictionary (key, value) where key = incident.latitude + "|" + incident.longitude
-    var groupedIncidentsByLatLng = {};
-    $.each(incidents, function (index, incident) {
-        //the incidents are grouped by lat and lng (function above) using a dictionary
-        groupedIncidentsByLatLng = groupIncidentsByLatLng(incidents);
-    });
-
-    for (var key in groupedIncidentsByLatLng) {
-        var arrayOfIncidents = groupedIncidentsByLatLng[key];
-        plotGroupOfIncidents(arrayOfIncidents);
-    }
-
-}
-
-function createInfoWindowContentForIncident(incident) {
-    // ` denotes JavaScript ECMA 6 template string
-    var content =
-        `<div id="contentInfowindow" class= "incidentInfoWindow">` +
-        `    <div id ="left" >` +
-        `       <div>`+
-        `           <img id = "imgInfowindow" class="imgModal" src="${incident.image}" width="50px" onclick="openModalBox('${incident.image}')"></img><br/><br/>`+
-        `       </div>`+
-        `    </div>       ` +
-        `    <div id="right">`+
-        `        <div id="object3">`+
-        `            ${incident.message}` +
-        `        </div>`+
-        `        <br/>`+
-        `        <div>`+
-        `            ${formatDate(incident.date)}` +
-        `        </div>`+
-        `    </div>` +
-        `</div>` +
-
-
-        `<button type="button" class ="btn btn-primary btn-block btn-sm" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
-
-    return content;
-}
-
-function reportNewIncidentOnMarker(latitude, longitude) {
-    //TODO close info windows??
-    $(function () {
-        $("#newIncidentForm").dialog({
-            modal: true,
-            resizable: true,
-            show: 'blind',
-            hide: 'blind',
-            width: 400,
-            height:430,
-            dialogClass: 'ui-dialog-osx',
-            buttons: {
-                "Report": function() {
-                    saveIncident(latitude, longitude);
-                    $(this).dialog("close");
-                },
-                "Close": function() {
-                    $(this).dialog('close');
-                }
-            }
-        });
-    });
-}
-
-function openModalBox(image) {
-    $('#zoomModal').css("display", "block");
-    $('#imgZoomModal').attr("src", image);
-}
-
-function closeModalBox() {
-    $('#zoomModal').css("display", "none");
-    $('#imgZoomModal').attr("src", '');
-}
-
-function getMultipleMarkerContentIncidentCount(groupOfIncidents){
-    var groupedByTypeIdIncidents = groupIncidentsByType(groupOfIncidents);
-    var content = ``;
-    var firstIncident = null;
-    for (var key in groupedByTypeIdIncidents) {
-        var incidentsByType = groupedByTypeIdIncidents[key];
-        firstIncident = incidentsByType[0];
-        content+=`<div><a><img src="${incidentIcons[firstIncident.type.id]}"/>`;
-        content+=`${incidentsByType.length} ${firstIncident.type.description}</a></div>`;
-    } 
-    return content
-}
-
-
+    //var actualInfowindow = this.infoWindow.anchor;
+    //actualInfowindow.close();
+    //actualInfowindow.setContent("hi");

@@ -248,6 +248,8 @@ var loadIncidents = function (latitude, longitude, radius) {
         url: `http://localhost:8080/incident-local?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
         success: function (data, textStatus, jqXHR) {
             plotIncidents(data);
+           //convertTimestampToDate(data);
+           loadIncidentsToChart(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('incidents load error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
@@ -261,3 +263,129 @@ var formatDate = function(someDate) {
 };
 
 
+function loadIncidentsToChart(incidents){
+    key = "";
+var incidentsDictionary = {};
+    $.each(incidents, function (index, incident) {
+        var key = incident.type;
+        if(!key in incidentsDictionary ){
+            incidentsDictionary[key].push(incident);
+    }
+
+    
+
+    })
+
+
+}
+
+/* 
+ key = latitude + "|" + longitude
+//        var dict = {};
+//        $.each(incidents, function (index, incident) {
+//            var key = incident.latitude + "|" + incident.longitude;
+//            if (!(key in dict)) {
+//                dict[key] = new Array();
+//            }
+//            dict[key].push(incident);
+//        });
+//        return dict;
+*/
+
+
+
+//function convertTimestampToDate(incidents){
+// 1. buid a dictionary(hash map) by picking up the incident.type as the key and incident.date as value
+// 2. order values (dates) in the dictionary 
+//  2.1 For that, maybe the dates should be converted to Date objects 
+ 
+
+
+
+
+
+
+/*      var incidentsByDateArray = new Array();
+     $.each(incidents, function (index, incident) {
+         var dateStr = incident.date;
+          // console.log(dateStr);
+         var dateObject = new Date(dateStr);
+         incidentsByDateArray.push(dateObject);
+
+}) */
+
+
+// var date_sort_desc = function (date1, date2) {
+//     // This is a comparison function that will result in dates being sorted in
+//     // DESCENDING order.
+//     if (date1 > date2) return -1;
+//     if (date1 < date2) return 1;
+//     return 0;
+//   };
+
+//  var arraySorted =  incidentsByDateArray.sort(date_sort_desc);
+// console.log("array sorted"+arraySorted);
+//  return arraySorted;
+// }
+
+
+
+
+        // var newIncidents = _.sortBy(incidents, function(dateObject) {
+          
+        //     //return new Date(dateObject.date);
+        //   });
+
+        //   console.log(newIncidents.date);
+          
+          
+   
+
+      
+       
+      // var key= incident.date
+
+
+
+
+
+      
+    // timestamp "2019-01-25T10:14:46.000+0000"
+
+   // var date = new Date(incident.date);
+   //var date = new Date(); 
+   
+   //var dateMonth = date.getMonth();
+
+    // console.log(dateMonth);
+    // console.log(date);
+
+    //var json = JSON.stringify(date);
+    //console.log(json);
+
+
+
+
+
+
+
+
+//        function groupIncidentsByLatLng(incidents) {
+//         key = latitude + "|" + longitude
+//        var dict = {};
+//        $.each(incidents, function (index, incident) {
+//            var key = incident.latitude + "|" + incident.longitude;
+//            if (!(key in dict)) {
+//                dict[key] = new Array();
+//            }
+//            dict[key].push(incident);
+//        });
+//        return dict;
+//    }
+
+
+
+
+    // var incidents = JSON.parse(jsonResult);
+    // var firstIncidentDate = incidents.date[0];
+    // console.log("firstIncidentDate"+firstIncidentDate);

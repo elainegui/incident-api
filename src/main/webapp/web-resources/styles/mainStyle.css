@@ -178,7 +178,7 @@ body{
       width:25%;
       margin:1px;
       /* padding:0.2em; */
-      background: rgb(243, 220, 236);
+      background: rgb(255, 255, 255);
     }
 
     #right{
@@ -187,13 +187,32 @@ body{
       width:70%;
       margin:1px;
       /* padding:0.2em; */
-      background: rgb(235, 180, 189);
+      background: rgb(255, 255, 255);
     }
 
     #object3{
-      background-color: lightblue;
+      /*background-color: lightblue;*/
       overflow:auto;
     }
+
+    /* css buttons infowindow multi incident */
+.wrapper {
+      text-align: center;
+      /* display:inline-block; */
+      /* background-color: rgb(241, 174, 86);  */
+}
+
+  .button{
+    background-color: rgb(47, 149, 231);
+    padding: 5px 10px;
+    color: #f7f7f7;
+    text-align: center;
+    margin:auto;
+    left:0;
+  }
+#btnMore{
+background-color: rgb(223, 174, 14);
+}
 
 /*     @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
     .panel-modest .panel-body {
@@ -212,4 +231,25 @@ body{
       height: 80vh;
       width: 80vw;
     }
-    
+
+    /* dialog box */
+    .ui-dialog-titlebar-close {
+      background-color: yellowgreen;
+  }
+
+     .ui-dialog, .ui-dialog-content {
+      /*border:10px solid orange;*/   /** change css properties to match your theme*/
+      background-color: rgb(247, 211, 157) !important;
+      color: red;
+      }
+
+        /* back main pg button */
+      .backMainPg{
+        color: white;
+        font-weight: bold;
+        text-align: center
+      }
+
+      #aMainPg{
+        color: white;
+      }
