@@ -233,9 +233,9 @@ background-color: rgb(223, 174, 14);
     }
 
     /* dialog box */
-    .ui-dialog-titlebar-close {
+ /*    .ui-dialog-titlebar-close {
       background-color: yellowgreen;
-  }
+  } */
 
      .ui-dialog, .ui-dialog-content {
       /*border:10px solid orange;*/   /** change css properties to match your theme*/
