@@ -219,8 +219,8 @@ $(function () {
              resizable: true,
              show: 'blind',
              hide: 'blind',
-             width: 370,
-             height:430,
+/*              width: 370,
+             height:430, */
              dialogClass: 'ui-dialog-osx',
              buttons: {
                  "Report": function() {
