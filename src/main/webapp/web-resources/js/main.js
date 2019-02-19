@@ -1,3 +1,6 @@
+var hostUsed = "http://localhost:8080";
+//"https://www.ottero.me";
+
 $(document).ready(function () {
     var username = localStorage.getItem("firstName");
     if (username === null) {
@@ -45,7 +48,8 @@ var validateLogin = function () {
     if(userId!==""||password!==""){
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
+            url: hostUsed + "/user?email=" + userId + '&password=' + password,
+			//url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
             dataType: "json",
             async: false,
             success: function (data) {
@@ -89,7 +93,8 @@ function registerUserAjaxPost() {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "http://localhost:8080/register",
+        url: hostUsed + "/register",
+		//url: "http://localhost:8080/register",
         data: JSON.stringify(formData),
         dataType: 'text',
 
@@ -220,7 +225,8 @@ function saveIncident(latitude, longitude) {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "http://localhost:8080/incident",
+        url: hostUsed + "/incident",
+		//url: "http://localhost:8080/incident",
         data: JSON.stringify(incidentData),
         dataType: 'json',
 
@@ -240,12 +246,11 @@ function saveIncident(latitude, longitude) {
 }
 
 var loadIncidents = function (latitude, longitude, radius) {
-    //alert(`http://localhost:8080/incident-local?latitude=${latitude}&longitude=${longitude}&radius=${radius}`);
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        //url: "http://localhost:8080/incident",
-        url: `http://localhost:8080/incident-local?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
+        url: hostUsed + `/incident-local?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
+		//url: `http://localhost:8080/incident-local?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
         success: function (data, textStatus, jqXHR) {
             plotIncidents(data);
            //convertTimestampToDate(data);
