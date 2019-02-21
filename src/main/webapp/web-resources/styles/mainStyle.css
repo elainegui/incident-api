@@ -232,11 +232,13 @@ background-color: rgb(223, 174, 14);
     }
     
     .chart-container {
+      display: none; /* Hidden by default */
       position: relative;
       margin: auto;
       height: 80vh;
       width: 80vw;
     }
+
 
     /* dialog box */
  /*    .ui-dialog-titlebar-close {
@@ -265,3 +267,7 @@ background-color: rgb(223, 174, 14);
         font-size:14pt;
       } */
 
+      .containerBody{
+        display: block;
+      }
+      

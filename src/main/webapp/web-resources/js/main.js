@@ -300,14 +300,7 @@ var incidentsDictionary = {};
 }
 
 function redirectUserLoggedToMainPage(dataFromForm, passw, uName){
-//    console.log("formData "+data);
-//    var dataToBeUsed = [data];
     console.log("password "+passw);
-
-   //validate login
-   //var userId = $('#userid').val();
-    //var password = $('#password').val();
-
  
          $.ajax({
              type: 'GET',
@@ -323,10 +316,126 @@ function redirectUserLoggedToMainPage(dataFromForm, passw, uName){
                  $("#validationMessage").text("invalid login/ password");
              }
          });
-   
-   //console.log("data.password"+data[password]);
 }
 
+function viewTrendsPage(){
+//     $.get("incidentTrends.html").success( function(result){
+//     $('body').html(result);
+// }).error(function(result){
+//     alert("Error!");
+// });
+    $(".containerBody").css("display", "none");
+     $(".chart-container").css("display", "block");
+     loadIncidentsToTrendsPage();
+}
+
+var loadIncidentsToTrendsPage = function () {
+
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: "http://localhost:8080/trend",
+        success: function (trends, textStatus, jqXHR) {
+            //trends json format:
+            //a list of dictionaries of dictionaries, as seen below:
+            // [
+            //     {
+            //         "incidentTypeDescription":"Car Crash",
+            //         "totalPerMonth":{
+            //             "03-2018":34, "04-2018":36, "05-2018":39, "06-2018":40, "07-2018":50, "08-2018":42,
+            //             "09-2018":39, "10-2018":31, "11-2018":36, "12-2018":21, "01-2019":21, "02-2019":2 }
+            //     },
+            //     {
+            //         "incidentTypeDescription":"Faulty Traffic Light",
+            //         "totalPerMonth":{
+            //             "03-2018":40, "04-2018":35, "05-2018":36, "06-2018":41, "07-2018":49, "08-2018":43,
+            //             "09-2018":30, "10-2018":27, "11-2018":41, "12-2018":39, "01-2019":6, "02-2019":1 }
+            //     },
+            // ...
+            //]
+            plotTrendsChart(trends);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('incidents load chart error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
+        }
+    });
+};
+
+
+
+var availableColors = [
+    "rgba(0,0,0,255)", "rgba(255,0,0,255)", "rgba(0,0,255,255)",
+    "rgba(0,255,0,255)", "rgba(255,255,0,255)", "rgba(0,255,255,255)"
+];
+
+function addLabels(targetDictionary, trendsData) {
+    targetDictionary['labels'] = Object.keys(trendsData[0]["totalPerMonth"]);
+}
+
+function addIncidents(chartData, trendsData) {
+    var numberOfIncidentTypes = trendsData.length;
+    var datasets = [];
+    for (var index = 0; index < numberOfIncidentTypes; index++) {
+        var incidentTypeChartData = {};
+        incidentTypeChartData["label"] = trendsData[index]["incidentTypeDescription"];
+        incidentTypeChartData["backgroundColor"] = "rgba(0,0,0,0)";
+        incidentTypeChartData["borderColor"] = availableColors[index];
+        incidentTypeChartData["borderWidth"] = "2";
+        incidentTypeChartData["hoverBackgroundColor"] = "rgba(255,99,132,0.4)";
+        incidentTypeChartData["hoverBorderColor"] = "rgba(255,99,132,1)";
+        incidentTypeChartData["data"] = Object.values(trendsData[index]["totalPerMonth"]);
+        incidentTypeChartData["type"] = "line";
+        datasets.push(incidentTypeChartData);
+    }
+    chartData["datasets"] = datasets;
+}
+
+function plotTrendsChart(trendsData) {
+    //defining background color
+    var ctx = document.getElementById("chart");
+    ctx.style.backgroundColor = 'rgba(255,255,255,255)';
+
+    var chartData = {};
+    addLabels(chartData, trendsData);
+    addIncidents(chartData, trendsData);
+
+    var chartOptions = {
+        title: {
+        display: true,
+        text: 'Incidents Trend'
+        },
+        responsive: 'true',
+        maintainAspectRatio: false,
+        scales: {
+            yAxes: [{
+                gridLines: {
+                    display: true,
+                    color: "rgba(255,99,132,0.2)"
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    display: true,
+                    color: "rgba(255,99,132,0.2)"
+                }
+            }]
+        },
+        layout: {
+        padding: {
+            left: 50,
+            right: 50,
+            top: 50,
+            bottom:50
+        }
+
+    }
+    };
+
+    Chart.Bar('chart', {
+        options: chartOptions,
+        data: chartData
+    });
+}
 
 /* 
  key = latitude + "|" + longitude
