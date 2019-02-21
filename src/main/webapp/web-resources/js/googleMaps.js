@@ -133,6 +133,7 @@ var componentForm = {
 };
 
 function initAutocomplete() {
+    //console.log("init autocomplete");
     // Create the autocomplete object, restricting the search to geographical
     // location types.
     autocomplete = new google.maps.places.Autocomplete(
@@ -154,6 +155,7 @@ function fillInAddress() {
 
     //changed
     place = autocomplete.getPlace();
+    //console.log("place: "+place);
 
     for (var component in componentForm) {
         document.getElementById(component).value = '';

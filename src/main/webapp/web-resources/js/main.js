@@ -89,6 +89,8 @@ function registerUserAjaxPost() {
         userLongitude: longitude
 
     };
+var passw = $("#password").val();
+var uName = $("#email").val();
     // DO POST
     $.ajax({
         type: "POST",
@@ -100,7 +102,12 @@ function registerUserAjaxPost() {
 
         success: function (data, textStatus, jqXHR) {
             alert('User registered successfully');
-            window.location.href = 'mainPage.html';
+            //added
+            var dataFromForm = JSON.stringify(formData);
+
+            redirectUserLoggedToMainPage(dataFromForm, passw, uName);
+            //console.log("formData "+JSON.stringify(formData));
+            //window.location.href = 'mainPage.html';
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('userRegistry error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
@@ -115,6 +122,14 @@ function loginSuccess(data) {
     window.location.href = 'mainPage.html';
 }
 
+//automatically login when user registers successfully
+function loginSuccessFromRegistration(data){
+    localStorage.setItem('firstName', data.firstName);
+    localStorage.setItem('userId', data.id);
+    window.location.href = 'mainPage.html';
+}
+
+//tab nav bar
 function register() {
     window.location.href = 'register.html';
 }
@@ -205,44 +220,49 @@ function logout() {
 }
 
 function saveIncident(latitude, longitude) {
-    event.preventDefault();
-    var typeData = {
-        id: $("#incidentType").val(),
-        description: $("#incidentType option:selected").text()
-    };
+    console.log("localStorage.getItem('firstName') "+localStorage.getItem('firstName'));
+    if (!localStorage.getItem('firstName')) {
+        alert("Please login to report an incident");
+    } else {
 
-    var incidentData = {
-        date: new Date(),
-        userId: localStorage.getItem('userId'),
-        type: typeData,
-        verified: false,
-        latitude: latitude,
-        longitude: longitude,
-        image: $("#photoBase64").val(),
-        message: $("#message").val()
-    };
+        event.preventDefault();
+        var typeData = {
+            id: $("#incidentType").val(),
+            description: $("#incidentType option:selected").text()
+        };
 
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: hostUsed + "/incident",
-		//url: "http://localhost:8080/incident",
-        data: JSON.stringify(incidentData),
-        dataType: 'json',
+        var incidentData = {
+            date: new Date(),
+            userId: localStorage.getItem('userId'),
+            type: typeData,
+            verified: false,
+            latitude: latitude,
+            longitude: longitude,
+            image: $("#photoBase64").val(),
+            message: $("#message").val()
+        };
 
-        success: function (data, textStatus, jqXHR) {
-            /*plotGroupOfIncidents([incidentData]);
-            $("#incidentType").val('');
-            $("#photoBase64").val('');
-            $("#message").val('')*/
-            window.location.href = 'mainPage.html';
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: hostUsed + "/incident",
+            //url: "http://localhost:8080/incident",
+            data: JSON.stringify(incidentData),
+            dataType: 'json',
 
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Incident report error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
-        }
-    });
+            success: function (data, textStatus, jqXHR) {
+                /*plotGroupOfIncidents([incidentData]);
+                $("#incidentType").val('');
+                $("#photoBase64").val('');
+                $("#message").val('')*/
+                window.location.href = 'mainPage.html';
 
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Incident report error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
+            }
+        });
+    }
 }
 
 var loadIncidents = function (latitude, longitude, radius) {
@@ -275,14 +295,38 @@ var incidentsDictionary = {};
         var key = incident.type;
         if(!key in incidentsDictionary ){
             incidentsDictionary[key].push(incident);
-    }
-
-    
-
+        }
     })
-
-
 }
+
+function redirectUserLoggedToMainPage(dataFromForm, passw, uName){
+//    console.log("formData "+data);
+//    var dataToBeUsed = [data];
+    console.log("password "+passw);
+
+   //validate login
+   //var userId = $('#userid').val();
+    //var password = $('#password').val();
+
+ 
+         $.ajax({
+             type: 'GET',
+             url: hostUsed + "/user?email=" + uName + '&password=' + passw,
+		 	//url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
+             dataType: "json",
+             async: false,
+             success: function (data) {
+                 loginSuccessFromRegistration(data);
+             },
+
+             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                 $("#validationMessage").text("invalid login/ password");
+             }
+         });
+   
+   //console.log("data.password"+data[password]);
+}
+
 
 /* 
  key = latitude + "|" + longitude
