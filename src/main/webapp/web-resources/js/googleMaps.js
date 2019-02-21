@@ -437,8 +437,8 @@ function getMultipleMarkerContentIncidentCount(groupOfIncidents){
         var incidentsByType = groupedByTypeIdIncidents[key];
         
         firstIncident = incidentsByType[0];
-        content+=`<div><a><img src="${incidentIcons[firstIncident.type.id]}"/>`;
-        content+=`${incidentsByType.length} ${firstIncident.type.description}</a></div>`;
+        content+=`<div style="padding: 2px 0px; font-weight: bold;"><img src="${incidentIcons[firstIncident.type.id]}"/>`;
+        content+=`&nbsp ${incidentsByType.length} ${firstIncident.type.description}</div>`;
     } 
     firstIncident = incidentsByType[0];     //onclick="openSecondInfowindowMultipleMarker(${groupOfIncidents})
     var buttons = `<div class="wrapper"><br/><button type="button" class="btn btn-primary btn-sm" style="padding: 6px 15px" id="btnMore" onclick="openSecondInfowindowMultipleMarker(${firstIncident.latitude}, ${firstIncident.longitude})">More</button>`;
@@ -467,7 +467,7 @@ function createInfoWindowContentForGroupOfIncidents(groupOfIncidents) {
         middle += `<div class="panel-heading" id="incident-panel-div-${firstIncident.id}-heading">`;
         middle += `<h4 class="panel-title">`;
         middle += `<a class="accordion-toggle" data-parent="#accordion" data-toggle="collapse" href="#incident-panel-div-${firstIncident.id}-content">`;
-        middle += `<img src="${incidentIcons[firstIncident.type.id]}"/>`;
+        middle += `<img src="${incidentIcons[firstIncident.type.id]}"/>&nbsp`;
         middle += `${incidentsByType.length} ${firstIncident.type.description}`;
         middle += `</a>`;
         middle += `</h4>`;
@@ -500,7 +500,7 @@ function createInfoWindowContentForGroupOfIncidents(groupOfIncidents) {
     }
 
     var ending = '</div>';
-    ending += `<button type="button" class ="btn btn-primary btn-block btn-sm" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${firstIncident.latitude}, ${firstIncident.longitude})">Report New Incident on this Location</button>`;
+    ending += `<button type="button" class ="btn btn-primary btn-block btn-sm" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${firstIncident.latitude}, ${firstIncident.longitude})">Report New Incident</button>`;
     ending += '</div>';
 
     return beginning + middle + ending;

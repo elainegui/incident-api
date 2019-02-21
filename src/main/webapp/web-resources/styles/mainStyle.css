@@ -185,7 +185,7 @@ body{
       float:right;
       min-height: 55px;
       width:70%;
-      margin:1px;
+      margin:3px;
       /* padding:0.2em; */
       background: rgb(255, 255, 255);
     }
@@ -193,6 +193,8 @@ body{
     #object3{
       /*background-color: lightblue;*/
       overflow:auto;
+      font-weight: bold;
+      color:rgb(141, 19, 235);
     }
 
     /* css buttons infowindow multi incident */
