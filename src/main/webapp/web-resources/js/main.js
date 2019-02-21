@@ -1,5 +1,5 @@
-var hostUsed = "http://localhost:8080";
-//"https://www.ottero.me";
+var hostUsed = `http://localhost:8080`;
+//var hostUsed = `https://www.ottero.me`;
 
 $(document).ready(function () {
     var username = localStorage.getItem("firstName");

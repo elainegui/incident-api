@@ -214,6 +214,10 @@ body{
 background-color: rgb(223, 174, 14);
 }
 
+.buttonHolderSingleIncident {
+  text-align: center;
+}
+
 /*     @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
     .panel-modest .panel-body {
       display: inline-block;
@@ -258,3 +262,4 @@ background-color: rgb(223, 174, 14);
         height:200px;
         font-size:14pt;
       } */
+

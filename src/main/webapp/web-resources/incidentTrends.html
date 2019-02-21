@@ -81,11 +81,19 @@
     }
 
     function plotTrendsChart(trendsData) {
+        //defining background color
+        var ctx = document.getElementById("chart");
+        ctx.style.backgroundColor = 'rgba(255,255,255,255)';
+
         var chartData = {};
         addLabels(chartData, trendsData);
         addIncidents(chartData, trendsData);
 
         var chartOptions = {
+            title: {
+            display: true,
+            text: 'Incidents Trend'
+            },
             responsive: 'true',
             maintainAspectRatio: false,
             scales: {
@@ -97,10 +105,20 @@
                 }],
                 xAxes: [{
                     gridLines: {
-                        display: false
+                        display: true,
+                        color: "rgba(255,99,132,0.2)"
                     }
                 }]
+            },
+            layout: {
+            padding: {
+                left: 50,
+                right: 50,
+                top: 50,
+                bottom:50
             }
+    
+        }
         };
 
         Chart.Bar('chart', {

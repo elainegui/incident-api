@@ -292,7 +292,8 @@ function plotGroupOfIncidents(groupOfIncidents) {
 function plotSingleIncident(incident) {
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(incident.latitude, incident.longitude),
-        icon: incidentIcons[incident.type.id],
+        // icon: incidentIcons[incident.type.id],
+        icon: "icons/icons8-marker-30.png",
         map: map
     });
     var infoWindow = new google.maps.InfoWindow({
@@ -387,9 +388,9 @@ function createInfoWindowContentForIncident(incident) {
         `    </div>` +
         `</div>` +
 
-
-        `<button type="button" class ="btn btn-primary btn-block btn-sm" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report New Incident on this Location</button>`;
-
+        `<div class= "buttonHolderSingleIncident">`+
+        `<button type="button" class ="btn btn-primary btn-sm" style="padding: 6px 70px; font-size: 14px;" id="newIncidentonMarkerButton" onclick="reportNewIncidentOnMarker(${incident.latitude}, ${incident.longitude})">Report</button>`+
+        `</div>`
     return content;
 }
 
