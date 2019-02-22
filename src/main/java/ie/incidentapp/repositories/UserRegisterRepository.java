@@ -13,6 +13,6 @@ public interface UserRegisterRepository extends CrudRepository<UserRegister, Str
     public UserRegister findOneByEmailAndPassword(String email, String password);
 
     //added
-    public UserRegister findOneByEmail(String email);
+    //public UserRegister findOneByEmail(String email);
 
 }

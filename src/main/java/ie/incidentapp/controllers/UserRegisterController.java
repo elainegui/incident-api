@@ -41,10 +41,10 @@ public class UserRegisterController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "user")
-    public UserRegister getUserRegister(@RequestParam("email") String email) {
+    // @RequestMapping(method = RequestMethod.GET, value = "user")
+    // public UserRegister getUserRegister(@RequestParam("email") String email) {
 
-        return userRegisterRepository.findOneByEmail(email);
-    }
+    //     return userRegisterRepository.findOneByEmail(email);
+    // }
 
 }
