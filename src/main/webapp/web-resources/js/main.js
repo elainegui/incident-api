@@ -36,6 +36,8 @@ $(document).ready(function () {
 });
 
 
+//******************* Login ******************************
+
 function login() {
     window.location.href = 'login.html';
 }
@@ -62,6 +64,32 @@ var validateLogin = function () {
         });
     }else{
         $("#validationMessage").text("Please fill in the fields");
+    }
+};
+
+function loginSuccess(data) {
+    localStorage.setItem('firstName', data.firstName);
+    localStorage.setItem('userId', data.id);
+    $("#loginForm")[0].reset();
+    window.location.href = 'mainPage.html';
+}
+
+//automatically login when user registers successfully
+function loginSuccessFromRegistration(data){
+    localStorage.setItem('firstName', data.firstName);
+    localStorage.setItem('userId', data.id);
+    window.location.href = 'mainPage.html';
+}
+
+//******************* Register ******************************
+
+var userRegister = function () {
+    // Prevent the form from submitting via the browser.
+    event.preventDefault();
+
+    if (validateUserRegister()) {
+        registerUserAjaxPost();
+        $("#registrationForm")[0].reset();
     }
 };
 
@@ -115,29 +143,14 @@ var uName = $("#email").val();
     });
 }
 
-function loginSuccess(data) {
-    localStorage.setItem('firstName', data.firstName);
-    localStorage.setItem('userId', data.id);
-    $("#loginForm")[0].reset();
-    window.location.href = 'mainPage.html';
-}
-
-//automatically login when user registers successfully
-function loginSuccessFromRegistration(data){
-    localStorage.setItem('firstName', data.firstName);
-    localStorage.setItem('userId', data.id);
-    window.location.href = 'mainPage.html';
-}
-
-//tab nav bar
-function register() {
-    window.location.href = 'register.html';
-}
-
 function validateUserRegister() {
+    //var emailExists = checkEmailExists();
+   // console.log("emailexists: "+emailExists);
+    //if(emailExists===false){
     $("#validationMessage").text('');
     return checkBlankFieldsInUserRegister() && checkPasswordConfirmationInUserRegister() &&
         checkAddressWasChosenInUserRegister();
+   // }
 }
 
 function checkAddressWasChosenInUserRegister() {
@@ -157,7 +170,6 @@ function checkPasswordConfirmationInUserRegister() {
     }
     return true;
 }
-
 
 function checkBlankFieldsInUserRegister() {
 
@@ -202,15 +214,40 @@ function checkBlankFieldsInUserRegister() {
     return true;
 }
 
-var userRegister = function () {
-    // Prevent the form from submitting via the browser.
-    event.preventDefault();
 
-    if (validateUserRegister()) {
-        registerUserAjaxPost();
-        $("#registrationForm")[0].reset();
+/* function checkEmailExists(){
+    var userEmail = $("#email").val();
+    if(userEmail!==""){
+        $.ajax({
+            type: 'GET',
+            url: hostUsed + "/user?email=" + userEmail,
+			//url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
+            dataType: "json",
+            async: false,
+            success: function () {
+                $("#validationMessage").text("This e mail already exists");
+                emailExists = true;
+
+            //function (data) {
+                //loginSuccess(data);
+               // return true
+            },
+
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //$("#validationMessage").text("invalid login/ password");
+                emailExists = false;
+            }
+        });
     }
-};
+  return emailExists 
+} */
+
+//tab nav bar
+function register() {
+    window.location.href = 'register.html';
+}
+
+//******************* Logout ******************************
 
 function logout() {
 
@@ -218,6 +255,8 @@ function logout() {
     localStorage.removeItem('userId');
     window.location.reload(true);
 }
+
+//**************************** */
 
 function saveIncident(latitude, longitude) {
     console.log("localStorage.getItem('firstName') "+localStorage.getItem('firstName'));
