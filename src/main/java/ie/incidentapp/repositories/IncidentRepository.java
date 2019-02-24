@@ -10,9 +10,9 @@ import ie.incidentapp.entities.Incident;
 
 public interface IncidentRepository extends CrudRepository<Incident, String> {
 
-    @Query(value = "SELECT id," + "       date," + "       image," + "       latitude," + "       longitude,"
-            + "       message," + "       user_id," + "       verified," + "       type_id " + "FROM   ("
-            + "       SELECT *," + "               ( ( ( Acos(Sin(( :latitude * Pi() / 180 )) * "
+    @Query(value = "SELECT id, date, image, latitude, longitude, country, state, city, "
+            + "       message,       user_id,       verified,       type_id FROM   ("
+            + "       SELECT *,               ( ( ( Acos(Sin(( :latitude * Pi() / 180 )) * "
             + "               Sin( ( incident.latitude * Pi() / 180 )) +"
             + "               Cos( ( :latitude * Pi() / 180 )) * "
             + "               Cos( ( incident.latitude * Pi() / 180 )) * "
