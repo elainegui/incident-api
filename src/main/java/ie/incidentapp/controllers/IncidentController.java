@@ -4,12 +4,7 @@ import ie.incidentapp.services.TrendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -50,4 +45,18 @@ public class IncidentController {
         return incidentRepository.findByRadiusInMeters(latitude, longitude, radius);
     }
 
+    @RequestMapping(value = "incident/country", method = RequestMethod.GET)
+    public Iterable<String> listAllCountries() {
+        return incidentRepository.findAllCountries();
+    }
+
+    @RequestMapping(value = "incident/country/{country}/state", method = RequestMethod.GET)
+    public Iterable<String> listAllStatesByCountry(@PathVariable String country) {
+        return incidentRepository.findAllStatesByCountry(country);
+    }
+
+    @RequestMapping(value = "incident/country/{country}/state/{state}/city", method = RequestMethod.GET)
+    public Iterable<String> listAllCitiesByState(@PathVariable String country, @PathVariable String state) {
+        return incidentRepository.findAllCitiesByState(country, state);
+    }
 }

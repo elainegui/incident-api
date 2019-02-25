@@ -118,21 +118,29 @@
             <div id="caption"></div>
         </div>
 
-
-
-
     </div>
-
 
     <!-- Trends chart -->
     <div id="trendsPg" class="chart-container">
+        <div>
+            Country:
+            <select id="countries" onchange="callLoadStates()">
+                <option>Choose the country</option>
+            </select>
+
+            State:
+            <select id="states" onchange="callLoadCities()">
+                <option>Choose the state</option>
+            </select>
+
+            City:
+            <select id="cities">
+                <option>Choose the city</option>
+            </select>
+
+            <input type="button" value="Plot trends" onclick="loadIncidentsToTrendsPage()"/>
+        </div>
         <canvas id="chart"></canvas>
-
-        Country: <select><option>Choose the country</option></select>
-        State: <select><option>Choose the state</option></select>
-        City: <select><option>Choose the city</option></select>
-        <input type="button" value="Plot trends" />
-
     </div>
 
     <script>

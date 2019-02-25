@@ -19,8 +19,8 @@ public class TrendService {
 
     private DateFormat dateFormatter = new SimpleDateFormat("MM-yyyy");
 
-    public List<Trend> findAllFromLast12Months() {
-        List<Incident> allIncidentsFromLast12Months = incidentRepository.findAllFromLast12Months();
+    public List<Trend> findAllFromLast12Months(String country, String state, String city) {
+        List<Incident> allIncidentsFromLast12Months = incidentRepository.findAllFromLast12Months(country, state, city);
 
         // organize the incidents per type description and per date (month), so their respective totals can be find in the next step
         Map<String, Map<String, Long>> incidentCounterByTypeAndDate = initializeMap();

@@ -357,47 +357,144 @@ function redirectUserLoggedToMainPage(dataFromForm, passw, uName){
          });
 }
 
-function viewTrendsPage(){
-//     $.get("incidentTrends.html").success( function(result){
-//     $('body').html(result);
-// }).error(function(result){
-//     alert("Error!");
-// });
-    $(".containerBody").css("display", "none");
-     $(".chart-container").css("display", "block");
-     loadIncidentsToTrendsPage();
+function removeMsDropDownNatureFromSelects(selectObjetsIds) {
+    for (var index = 0; index < selectObjetsIds.length; index++) {
+        var select = $("#" + selectObjetsIds[index]).msDropdown().data("dd");
+        select.destroy();
+    }
 }
 
-var loadIncidentsToTrendsPage = function () {
+function viewTrendsPage(){
+    $(".containerBody").css("display", "none");
+     $(".chart-container").css("display", "block");
+    removeMsDropDownNatureFromSelects(['countries', 'states', 'cities']);
+    loadCountries();
+}
 
+function loadValuesToSelectElement(selectName, values) {
+    //get reference to the select object
+    var select = document.querySelector("#" + selectName);
+    for (var index = 0; index < values.length; index++) {
+        country = toProperCase(values[index]);
+        var option = document.createElement('option');
+        option.value = country;
+        option.text = country;
+        select.add(option, null);
+    }
+}
+
+function removeValuesFromSelectElement(selectName) {
+    //get reference to the select object
+    var select = document.querySelector("#" + selectName);
+    var itemsToRemove = select.length;
+    for (var index = 0; index < itemsToRemove; index++) {
+        select.remove(0);
+    }
+}
+
+function loadCountries() {
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: "http://localhost:8080/trend",
-        success: function (trends, textStatus, jqXHR) {
-            //trends json format:
-            //a list of dictionaries of dictionaries, as seen below:
-            // [
-            //     {
-            //         "incidentTypeDescription":"Car Crash",
-            //         "totalPerMonth":{
-            //             "03-2018":34, "04-2018":36, "05-2018":39, "06-2018":40, "07-2018":50, "08-2018":42,
-            //             "09-2018":39, "10-2018":31, "11-2018":36, "12-2018":21, "01-2019":21, "02-2019":2 }
-            //     },
-            //     {
-            //         "incidentTypeDescription":"Faulty Traffic Light",
-            //         "totalPerMonth":{
-            //             "03-2018":40, "04-2018":35, "05-2018":36, "06-2018":41, "07-2018":49, "08-2018":43,
-            //             "09-2018":30, "10-2018":27, "11-2018":41, "12-2018":39, "01-2019":6, "02-2019":1 }
-            //     },
-            // ...
-            //]
-            plotTrendsChart(trends);
+        url: "http://localhost:8080/incident/country",
+        success: function (countriesList, textStatus, jqXHR) {
+            removeValuesFromSelectElement("countries");
+            loadValuesToSelectElement("countries", countriesList);
+            callLoadStates();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert('incidents load chart error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
+            alert('load countries error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
         }
     });
+}
+
+function loadStates(country) {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: `http://localhost:8080/incident/country/${country}/state`,
+        success: function (statesList, textStatus, jqXHR) {
+            removeValuesFromSelectElement("states");
+            loadValuesToSelectElement("states", statesList);
+            callLoadCities();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('load states error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
+        }
+    });
+}
+
+function loadCities(country, state) {
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: `http://localhost:8080/incident/country/${country}/state/${state}/city`,
+        success: function (citiesList, textStatus, jqXHR) {
+            removeValuesFromSelectElement("cities");
+            loadValuesToSelectElement("cities", citiesList);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('load cities error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
+        }
+    });
+}
+
+function callLoadStates() {
+    var country = document.querySelector("#countries").value;
+    if (country !== 'Choose the country') {
+        loadStates(country);
+    }
+}
+
+function callLoadCities() {
+    var country = document.querySelector("#countries").value;
+    var state = document.querySelector("#states").value;
+    if (state !== 'Choose the state') {
+        loadCities(country, state);
+    }
+}
+
+function toProperCase(value) {
+    return value.replace(/(?:^|\s)\w/g, function(match) {
+        return match.toUpperCase();
+    });
+}
+
+
+var loadIncidentsToTrendsPage = function () {
+    var country = document.querySelector("#countries").value;
+    var state = document.querySelector("#states").value;
+    var city = document.querySelector("#cities").value;
+    if (city !== 'Choose the city') {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json",
+            url: `http://localhost:8080/trend?country=${country}&state=${state}&city=${city}`,
+            success: function (trends, textStatus, jqXHR) {
+                //trends json format:
+                //a list of dictionaries of dictionaries, as seen below:
+                // [
+                //     {
+                //         "incidentTypeDescription":"Car Crash",
+                //         "totalPerMonth":{
+                //             "03-2018":34, "04-2018":36, "05-2018":39, "06-2018":40, "07-2018":50, "08-2018":42,
+                //             "09-2018":39, "10-2018":31, "11-2018":36, "12-2018":21, "01-2019":21, "02-2019":2 }
+                //     },
+                //     {
+                //         "incidentTypeDescription":"Faulty Traffic Light",
+                //         "totalPerMonth":{
+                //             "03-2018":40, "04-2018":35, "05-2018":36, "06-2018":41, "07-2018":49, "08-2018":43,
+                //             "09-2018":30, "10-2018":27, "11-2018":41, "12-2018":39, "01-2019":6, "02-2019":1 }
+                //     },
+                // ...
+                //]
+                plotTrendsChart(trends);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('incidents load chart error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
+            }
+        });
+    }
 };
 
 

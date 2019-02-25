@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -28,8 +29,18 @@ public class TrendController {
         };
     }
 
+//    @RequestMapping(value = "trend", method = RequestMethod.GET)
+//    public Iterable<Trend> listAllIncidentsFromLast12Months() {
+//        return trendService.findAllFromLast12Months();
+//    }
+
     @RequestMapping(value = "trend", method = RequestMethod.GET)
-    public Iterable<Trend> listAllIncidentsFromLast12Months() {
-        return trendService.findAllFromLast12Months();
+    public Iterable<Trend> listAllIncidentsFromLast12MonthsInGeographicalArea(
+            @RequestParam("country") String country,
+            @RequestParam("state") String state,
+            @RequestParam("city") String city) {
+        return trendService.findAllFromLast12Months(country, state, city);
     }
+
+
 }

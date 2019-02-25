@@ -26,7 +26,16 @@ public interface IncidentRepository extends CrudRepository<Incident, String> {
     @Query(value = "SELECT incident.*, incident_type.description FROM " +
             "incident inner join incident_type on type_id = incident_type.id " +
             "WHERE date BETWEEN (NOW() - INTERVAL 12 MONTH) AND NOW() " +
+            "and country = :country and state = :state and city = :city " +
             "order by date, type_id", nativeQuery = true)
-    List<Incident> findAllFromLast12Months();
+    List<Incident> findAllFromLast12Months(@Param("country") String country, @Param("state") String state, @Param("city") String city);
 
+    @Query(value = "select distinct lower(country) from incident order by 1", nativeQuery = true)
+    List<String> findAllCountries();
+
+    @Query(value = "select distinct lower(state) from incident where lower(country) = lower(:country) order by 1", nativeQuery = true)
+    List<String> findAllStatesByCountry(@Param("country") String country);
+
+    @Query(value = "select distinct lower(city) from incident where lower(country) = lower(:country) and lower(state) = lower(:state) order by 1", nativeQuery = true)
+    List<String> findAllCitiesByState(@Param("country") String country, @Param("state") String state);
 }
