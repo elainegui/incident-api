@@ -28,11 +28,12 @@
 </head>
 
 <body>
-    <div class="login-form">
-        <div class="row register-form">
+    <span><img href="#" src="icons/logoIncidentApp_80px.png" style="max-width: 100%; display:block; margin: 10px auto auto auto; "></span>
+    <div class="login-form" style="margin-bottom:20px;">
+        <div class="row register-form" style="display:block; margin-left: auto; margin-right: auto; ">
             <!-- <div class="col-md-6"> -->
             <form id="registrationForm" method="post">
-                <h2 class="text-center">Register New User</h2>
+                <h2 class="text-center">Sign In</h2>
                 <div class="form-group">
                     <!--<form name= "registerForm" onsubmit="return validateForm()" method="post">-->
                     <label for="firstName">First Name</label> <input class="form-control" id="firstName" name="firstName"
@@ -110,11 +111,14 @@
             </form>
         </div>
     </div>
-    <p id="questionAccount">Already Registered?</p>
-    <p class="text-center">
+    <div id="questionAccount">
+    <p style="margin: 0px 0px 0px 0px">Already Registered?</p>
+    <a href="login.html" id="txtCreateAcc" style="margin: 0px 0px 0px 0px">Log In</a>
+</div>
+    <!-- <p class="text-center">
         <a href="login.html" id="txtCreateAcc">Log In</a>
-    </p>
-    <p class="backMainPg"><a id= "aMainPg" href="mainPage.html">Back to Main Page</a></p>
+    </p> -->
+    <p><a id= "aMainPg" href="mainPage.html">Back to Main Page</a></p>
 
 </body>
 
