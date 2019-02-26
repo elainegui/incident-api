@@ -23,7 +23,7 @@ public class TrendService {
         List<Incident> allIncidentsFromLast12Months = incidentRepository.findAllFromLast12Months(country, state, city);
 
         // organize the incidents per type description and per date (month), so their respective totals can be find in the next step
-        Map<String, Map<String, Long>> incidentCounterByTypeAndDate = initializeMap();
+        Map<String, Map<String, Long>> incidentCounterByTypeAndDate = initializeMap(); //ex. {Car Crash,{december,0}
 
         //for every incident found, increment the respective counter
         for (Incident incident: allIncidentsFromLast12Months) {
@@ -48,26 +48,28 @@ public class TrendService {
     }
 
     private Map<String, Map<String, Long>> initializeMap() {
-        Map<String, Map<String, Long>> incidentCounterByTypeAndDate = new LinkedHashMap<>();
-        List<String> past12Months = buildListOfPast12Months();
+        Map<String, Map<String, Long>> incidentCounterByTypeAndDate = new LinkedHashMap<>();//{incident type description ,n. incidents}
+        List<String> past12Months = buildListOfPast12Months(); // list of all past 12 months
         long initialIncidentCount = 0;
         for (IncidentTypeEnum incidentTypeEnum: IncidentTypeEnum.values()) {
             //for each incident type, creates an empty map to store the months and initial incident count
-            incidentCounterByTypeAndDate.put(incidentTypeEnum.getIncidentType().getDescription(), new LinkedHashMap<>());
+            incidentCounterByTypeAndDate.put(incidentTypeEnum.getIncidentType().getDescription(), new LinkedHashMap<>()); //{incident type description , {key,value}}
             for (String month: past12Months) {
                 //for each month, add the initial incident count
                 incidentCounterByTypeAndDate.get(incidentTypeEnum.getIncidentType().getDescription()).put(month, initialIncidentCount);
+                //get the key(incidentTypeEnum.getIncidentType().getDescription()) and include the value a new hash map (month, initialIncidentCount)
+                //ex. {Car Crash,{december,1}
             }
         }
         return incidentCounterByTypeAndDate;
     }
 
-
+    //build an enpty arry list of the past 12 months
     private List<String> buildListOfPast12Months() {
         List<String> past12Months = new ArrayList<>();
         SimpleDateFormat monthDate = new SimpleDateFormat("MM-yyyy");
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, -11);
+        cal.add(Calendar.MONTH, -11); // back 11 months from current date
         for (int monthIndex = 1; monthIndex <= 12; monthIndex++) {
             String monthName = monthDate.format(cal.getTime());
             past12Months.add(monthName);
