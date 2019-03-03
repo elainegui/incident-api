@@ -51,7 +51,6 @@ var validateLogin = function () {
         $.ajax({
             type: 'GET',
             url: hostUsed + "/user?email=" + userId + '&password=' + password,
-			//url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
             dataType: "json",
             async: false,
             success: function (data) {
@@ -124,7 +123,6 @@ var uName = $("#email").val();
         type: "POST",
         contentType: "application/json",
         url: hostUsed + "/register",
-		//url: "http://localhost:8080/register",
         data: JSON.stringify(formData),
         dataType: 'text',
 
@@ -221,7 +219,6 @@ function checkBlankFieldsInUserRegister() {
         $.ajax({
             type: 'GET',
             url: hostUsed + "/user?email=" + userEmail,
-			//url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
             dataType: "json",
             async: false,
             success: function () {
@@ -258,50 +255,101 @@ function logout() {
 
 //**************************** */
 
+function convertCoordinatesToAddress(latitude, longitude) {
+    var fallbackResult = "unspecified";
+    $.ajax({
+        type: "GET",
+        async: false,
+        url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyCuy8n1cKEwpSJ2uYmi8xIw7GV8u94Tciw&result_type=country|administrative_area_level_1|locality`,
+        success: function (data, textStatus, jqXHR) {
+            /*console.log(`${latitude},${longitude}`);
+            console.log(data);*/
+            var country, state, city;
+            // special case for UK
+            if (resolveAddressComponentFromGeocodeResult(data.results[2]) === 'United Kingdom') {
+                country = resolveAddressComponentFromGeocodeResult_UK(data.results[0], 3);
+                state = resolveAddressComponentFromGeocodeResult_UK(data.results[0], 2);
+                city = resolveAddressComponentFromGeocodeResult_UK(data.results[0], 0);
+            } else {
+                if (data.results.length === 2) {
+                    // if there is no city, use fallbackResult for it
+                    country = resolveAddressComponentFromGeocodeResult(data.results[1]);
+                    state = resolveAddressComponentFromGeocodeResult(data.results[0]);
+                    city = fallbackResult;
+                } else {
+                    // normal case
+                    country = resolveAddressComponentFromGeocodeResult(data.results[2]);
+                    state = resolveAddressComponentFromGeocodeResult(data.results[1]);
+                    city = resolveAddressComponentFromGeocodeResult(data.results[0]);
+                }
+            }
+            persistIncident(latitude, longitude, country, state, city);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            persistIncident(latitude, longitude, fallbackResult, fallbackResult, fallbackResult);
+        }
+    });
+}
+
+function resolveAddressComponentFromGeocodeResult(result) {
+    try {
+        return result.address_components[0].long_name;
+    } catch(err) {
+        return "unspecified";
+    }
+}
+
+function resolveAddressComponentFromGeocodeResult_UK(result, index) {
+    try {
+        return result.address_components[index].long_name;
+    } catch(err) {
+        return "unspecified";
+    }
+}
+
 function saveIncident(latitude, longitude) {
-    console.log("localStorage.getItem('firstName') "+localStorage.getItem('firstName'));
+    //console.log("localStorage.getItem('firstName') "+localStorage.getItem('firstName'));
     if (!localStorage.getItem('firstName')) {
         alert("Please login to report an incident");
     } else {
-
-        event.preventDefault();
-        var typeData = {
-            id: $("#incidentType").val(),
-            description: $("#incidentType option:selected").text()
-        };
-
-        var incidentData = {
-            date: new Date(),
-            userId: localStorage.getItem('userId'),
-            type: typeData,
-            verified: false,
-            latitude: latitude,
-            longitude: longitude,
-            image: $("#photoBase64").val(),
-            message: $("#message").val()
-        };
-
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            url: hostUsed + "/incident",
-            //url: "http://localhost:8080/incident",
-            data: JSON.stringify(incidentData),
-            dataType: 'json',
-
-            success: function (data, textStatus, jqXHR) {
-                /*plotGroupOfIncidents([incidentData]);
-                $("#incidentType").val('');
-                $("#photoBase64").val('');
-                $("#message").val('')*/
-                window.location.href = 'mainPage.html';
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert('Incident report error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
-            }
-        });
+        convertCoordinatesToAddress(latitude, longitude);
     }
+}
+
+function persistIncident(latitude, longitude, country, state, city) {
+    event.preventDefault();
+    var typeData = {
+        id: $("#incidentType").val(),
+        description: $("#incidentType option:selected").text()
+    };
+
+    var incidentData = {
+        date: new Date(),
+        userId: localStorage.getItem('userId'),
+        type: typeData,
+        verified: false,
+        latitude: latitude,
+        longitude: longitude,
+        image: $("#photoBase64").val(),
+        message: $("#message").val(),
+        country: country,
+        state: state,
+        city: city
+    };
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: hostUsed + "/incident",
+        data: JSON.stringify(incidentData),
+        dataType: 'json',
+        success: function (data, textStatus, jqXHR) {
+            window.location.href = 'mainPage.html';
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Incident report error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
+        }
+    });
 }
 
 var loadIncidents = function (latitude, longitude, radius) {
@@ -309,7 +357,6 @@ var loadIncidents = function (latitude, longitude, radius) {
         type: "GET",
         contentType: "application/json",
         url: hostUsed + `/incident-local?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
-		//url: `http://localhost:8080/incident-local?latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
         success: function (data, textStatus, jqXHR) {
             plotIncidents(data);
            //convertTimestampToDate(data);
@@ -344,7 +391,6 @@ function redirectUserLoggedToMainPage(dataFromForm, passw, uName){
          $.ajax({
              type: 'GET',
              url: hostUsed + "/user?email=" + uName + '&password=' + passw,
-		 	//url: 'http://localhost:8080/user?email=' + userId + '&password=' + password,
              dataType: "json",
              async: false,
              success: function (data) {
@@ -396,11 +442,13 @@ function loadCountries() {
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: "http://localhost:8080/incident/country",
+        url: hostUsed + "/incident/country",
         success: function (countriesList, textStatus, jqXHR) {
-            removeValuesFromSelectElement("countries");
-            loadValuesToSelectElement("countries", countriesList);
-            callLoadStates();
+            if (countriesList.length > 0) {
+                removeValuesFromSelectElement("countries");
+                loadValuesToSelectElement("countries", countriesList);
+                callLoadStates();
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('load countries error: textStatus: ' + textStatus + ' | jqXHR.status: ' + jqXHR.status + ' | errorThrown: ' + errorThrown);
@@ -412,7 +460,7 @@ function loadStates(country) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: `http://localhost:8080/incident/country/${country}/state`,
+        url: hostUsed + `/incident/country/${country}/state`,
         success: function (statesList, textStatus, jqXHR) {
             removeValuesFromSelectElement("states");
             loadValuesToSelectElement("states", statesList);
@@ -428,7 +476,7 @@ function loadCities(country, state) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: `http://localhost:8080/incident/country/${country}/state/${state}/city`,
+        url: hostUsed + `/incident/country/${country}/state/${state}/city`,
         success: function (citiesList, textStatus, jqXHR) {
             removeValuesFromSelectElement("cities");
             loadValuesToSelectElement("cities", citiesList);
@@ -469,7 +517,7 @@ var loadIncidentsToTrendsPage = function () {
         $.ajax({
             type: "GET",
             contentType: "application/json",
-            url: `http://localhost:8080/trend?country=${country}&state=${state}&city=${city}`,
+            url: hostUsed + `/trend?country=${country}&state=${state}&city=${city}`,
             success: function (trends, textStatus, jqXHR) {
                 //trends json format:
                 //a list of dictionaries of dictionaries, as seen below:

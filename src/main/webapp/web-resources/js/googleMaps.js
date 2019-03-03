@@ -1,4 +1,4 @@
-var map, infoWindow;
+var map, infoWindow, geocoder;
 //added 
 var markerCurrentPosition;
 
@@ -26,7 +26,9 @@ function loadIncidentsAroundMapCenter() {
 }
 
 function initMap() {
-   // var currentLatitude = new google.maps.LatLng.position
+    // creating a geocoder instance to perform coordinates conversion into addresses
+    geocoder = new google.maps.Geocoder;
+    // var currentLatitude = new google.maps.LatLng.position
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -540,7 +542,30 @@ function openSecondInfowindowMultipleMarker(lat,lng){
  
  
 }
- 
+
+function convertCoordinatesToAddress(latitude, longitude) {
+    var latlng = {lat: latitude, lng: longitude};
+
+    geocoder.geocode({'location': latlng}, function(results, status) {
+        if (status === 'OK') {
+            if (results[0]) {
+                //return
+            } else {
+                window.alert('No results found');
+            }
+        } else {
+            window.alert('Geocoder failed due to: ' + status);
+        }
+    });
+}
+
+
+
+
+
+
+
+
  /*   //  var prevInfowindow2=false;
 
         //on content changed
